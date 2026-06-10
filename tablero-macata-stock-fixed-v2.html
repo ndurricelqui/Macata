@@ -176,6 +176,7 @@ function gvizRowsToRaw(data){
 
 function applyStockRowsMacata(rawRows,sourceLabel){
   var stockMap={},total=0,omitHeader=0,omitNoArt=0,omitNoFam=0;
+  window._colorCodeToName={};
   rawRows.forEach(function(r){
     var articulo=String(r.articulo||'').trim();
     if(normCol(articulo)==='articulo'){omitHeader++;return;}
@@ -183,7 +184,9 @@ function applyStockRowsMacata(rawRows,sourceLabel){
     var fam=famFromStockRow(articulo,r.desc);
     if(!fam){omitNoFam++;return;}
     // Para Macata conviene mostrar y cruzar por descripcion de color, porque las NPs usan nombres (BEIGE, NEGRO, AZUL MARINO), no codigos H2/C4/etc.
-    var color=String(r.colorDesc||r.color||'').trim();
+    var colorCode=String(r.color||'').trim();
+    var color=String(r.colorDesc||colorCode).trim();
+    if(colorCode&&color)window._colorCodeToName[colorCode.toUpperCase()]=color;
     var talle=String(r.talle!=null?r.talle:'').trim();
     var qty=parseStockNum(r.cordoba)+parseStockNum(r.cordoba2);
     var k=fam+'|'+color+'|'+talle;
@@ -429,11 +432,12 @@ function loadTrelloProyMap(){
         if(!skuVal)continue;
         if(statusVal.toLowerCase()!=='pedido')continue;
         var parts=skuVal.trim().split('-');if(parts.length<3)continue;
-        var talle=parts[parts.length-1];var color=parts[parts.length-2];
+        var talle=parts[parts.length-1];var colorRaw=parts[parts.length-2];
         var codigo=parts.slice(0,parts.length-2).join('-').toUpperCase();
         var fam=TRELLO_CODE_FAM[codigo];if(!fam)continue;
         var qty=parseFloat(qtyVal)||1;
-        var k=fam+'|'+normColor(color)+'|'+talle;
+        var colorNom=(window._colorCodeToName||{})[colorRaw.toUpperCase()]||colorRaw;
+        var k=fam+'|'+normColor(colorNom)+'|'+talle;
         tMap[k]=(tMap[k]||0)+qty;
       }
     });
