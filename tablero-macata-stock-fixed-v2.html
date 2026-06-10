@@ -204,6 +204,7 @@ function applyStockRowsMacata(rawRows,sourceLabel){
   if(kpiProy)kpiProy.textContent=Math.round(window._kpiProyBase-(window._trelloProyTotal||0)).toLocaleString('es-AR');
   var hdr=document.querySelector('header span');
   if(hdr)hdr.textContent='Stock al: '+new Date().toLocaleString('es-AR');
+  loadTrelloProyMap();
 }
 
 function loadStockFromSheets(){
@@ -551,7 +552,6 @@ function renderPedido(containerId){
 renderNotas();
 loadStockFromSheets();
 renderProyectado('proy-list');
-loadTrelloProyMap();
 renderPedido('pedido-list');
 </script>
 <div id="proy-tt" onclick="event.stopPropagation()"></div>
