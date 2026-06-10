@@ -1,0 +1,16 @@
+# Datos de stock y pedidos (se generan localmente via scripts)
+data/stock.json
+data/notas_pedido/
+data/pedidos/
+
+# Archivos generados
+Reporte Stock.csv
+reportes/
+
+# Versiones antiguas del tablero
+tablero.html
+tablero-macata-stock-fixed.html
+
+# Archivos de sistema
+Thumbs.db
+.DS_Store
