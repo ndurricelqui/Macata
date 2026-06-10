@@ -399,10 +399,9 @@ function toggleProyTT(cell,e){
 document.addEventListener('click',function(){var tt=document.getElementById('proy-tt');if(tt)tt.style.display='none';_ttActiveCell=null;});
 
 function loadTrelloProyMap(){
-  var key=localStorage.getItem('compras_key');
-  var tok=localStorage.getItem('compras_token');
-  var board=localStorage.getItem('compras_board');
-  if(!key||!tok||!board)return;
+  var key='944a71628ede0c2574331cd84636a178';
+  var tok='ATTAfbaac5a9d64f55d0d257822592589de5444aab8e7e0e074826fc2d3ecf5331f5BFB4BD6F';
+  var board='3sWRgjJ3';
   function tApi(ep){var sep=ep.indexOf('?')!==-1?'&':'?';return fetch('https://api.trello.com/1'+ep+sep+'key='+key+'&token='+tok).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();});}
   Promise.all([
     tApi('/boards/'+board+'/lists?'),
