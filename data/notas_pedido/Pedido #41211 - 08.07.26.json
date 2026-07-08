@@ -1,0 +1,29 @@
+{
+  "id": "Pedido #41211 - 08.07.26",
+  "numero_pedido": "41211",
+  "fecha_emision": "2026-07-08",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "AZUL MARINO", "talle": "40", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "VERDE", "talle": "44", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "VERDE", "talle": "46", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "VERDE", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "BEIGE", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "NEGRO", "talle": "40", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "NEGRO", "talle": "42", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "NEGRO", "talle": "44", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "NEGRO", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "NEGRO", "talle": "50", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "NEGRO", "talle": "54", "cantidad_solicitada": 3 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "creado_en": "2026-07-08T00:00:00Z"
+}
