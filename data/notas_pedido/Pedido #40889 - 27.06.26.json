@@ -1,0 +1,81 @@
+{
+  "id": "Pedido #40889 - 27.06.26",
+  "numero_pedido": "40889",
+  "fecha_emision": "2026-06-27",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    {
+      "codigo": null,
+      "descripcion": "Jean Worker",
+      "color": "DENIM",
+      "talle": "44",
+      "cantidad_solicitada": 5
+    },
+    {
+      "codigo": null,
+      "descripcion": "Jean Worker",
+      "color": "DENIM",
+      "talle": "48",
+      "cantidad_solicitada": 5
+    },
+    {
+      "codigo": null,
+      "descripcion": "Jean Worker (t. 56-60)",
+      "color": "DENIM",
+      "talle": "56",
+      "cantidad_solicitada": 5
+    },
+    {
+      "codigo": null,
+      "descripcion": "Jean Worker (t. 56-60)",
+      "color": "DENIM",
+      "talle": "58",
+      "cantidad_solicitada": 2
+    },
+    {
+      "codigo": null,
+      "descripcion": "Jean Worker (t. 56-60)",
+      "color": "DENIM",
+      "talle": "60",
+      "cantidad_solicitada": 2
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Trip",
+      "color": "AZUL",
+      "talle": "S",
+      "cantidad_solicitada": 1
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Trip",
+      "color": "AZUL",
+      "talle": "M",
+      "cantidad_solicitada": 2
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Trip",
+      "color": "AZUL",
+      "talle": "XL",
+      "cantidad_solicitada": 2
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Trip",
+      "color": "AZUL",
+      "talle": "XXXL",
+      "cantidad_solicitada": 1
+    }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 25
+  },
+  "creado_en": "2026-06-27T00:00:00.000Z"
+}

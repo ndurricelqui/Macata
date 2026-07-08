@@ -1,7 +1,5 @@
-# Datos de stock y pedidos (se generan localmente via scripts)
+# Datos de stock (se generan localmente via scripts)
 data/stock.json
-data/notas_pedido/
-data/pedidos/
 
 # Archivos generados
 Reporte Stock.csv

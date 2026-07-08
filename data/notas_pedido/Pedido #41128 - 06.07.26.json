@@ -1,0 +1,32 @@
+{
+  "id": "Pedido #41128 - 06.07.26",
+  "numero_pedido": "41128",
+  "fecha_emision": "2026-07-06",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "AZUL MARINO", "talle": "44", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "AZUL MARINO", "talle": "46", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "AZUL MARINO", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "AZUL MARINO", "talle": "50", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "AZUL MARINO", "talle": "52", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "BEIGE", "talle": "50", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "BEIGE", "talle": "54", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "44", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "46", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "50", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "52", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "58", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón de Trabajo", "color": "VERDE", "talle": "60", "cantidad_solicitada": 3 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "creado_en": "2026-07-06T00:00:00Z"
+}

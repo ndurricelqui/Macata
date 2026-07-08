@@ -1,0 +1,30 @@
+{
+  "id": "Pedido #41129 - 06.07.26",
+  "numero_pedido": "41129",
+  "fecha_emision": "2026-07-06",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Camisa de Trabajo (t. 50-56)", "color": "AZUL MARINO", "talle": "54", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo (t. 50-56)", "color": "VERDE", "talle": "50", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo (t. 50-56)", "color": "VERDE", "talle": "52", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de trabajo PAMPERO (t. 58-64)", "color": "AZUL MARINO", "talle": "58", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de trabajo PAMPERO (t. 58-64)", "color": "AZUL MARINO", "talle": "60", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de trabajo PAMPERO (t. 58-64)", "color": "VERDE", "talle": "60", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de trabajo PAMPERO (t. 58-64)", "color": "BEIGE", "talle": "60", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo", "color": "VERDE", "talle": "44", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo", "color": "VERDE", "talle": "46", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo", "color": "VERDE", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo", "color": "BEIGE", "talle": "42", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Camisa de Trabajo", "color": "BEIGE", "talle": "44", "cantidad_solicitada": 10 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "creado_en": "2026-07-06T00:00:00Z"
+}

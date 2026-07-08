@@ -1,0 +1,24 @@
+{
+  "id": "Pedido #40561 - 18.06.26",
+  "numero_pedido": "40561",
+  "fecha_emision": "2026-06-18",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "42", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "46", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "BEIGE", "talle": "42", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "42", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "44", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "BEIGE", "talle": "44", "cantidad_solicitada": 5 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 40
+  },
+  "creado_en": "2026-06-18T00:00:00.000Z"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "Pedido #41125 - 06.07.26",
+  "numero_pedido": "41125",
+  "fecha_emision": "2026-07-06",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Cargo Ripstop (t. 56-60)", "color": "VERDE", "talle": "56", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop (t. 56-60)", "color": "VERDE", "talle": "58", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop (t. 56-60)", "color": "VERDE", "talle": "60", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "40", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "42", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "44", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "46", "cantidad_solicitada": 15 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "50", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "52", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "VERDE", "talle": "54", "cantidad_solicitada": 5 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "creado_en": "2026-07-06T00:00:00Z"
+}
