@@ -3,7 +3,7 @@
 
 $BASE       = 'c:\Users\usuario\Documents\Stock\Macata'
 $NP_DIR     = "$BASE\data\notas_pedido"
-$TABLERO    = "$BASE\tablero.html"   # Nota: NO usar $html como nombre, colisiona con $HTML en PS
+$TABLERO    = "$BASE\tablero-macata-stock-fixed-v2.html"   # Nota: NO usar $html como nombre, colisiona con $HTML en PS
 
 # ---- Leer notas pendientes ----
 $notasArr = @()
