@@ -1,0 +1,39 @@
+{
+  "id": "Pedido #41339 - 15.07.26",
+  "numero_pedido": "41339",
+  "fecha_emision": "2026-07-15",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "VISÓN", "talle": "M", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "VISÓN", "talle": "L", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "VISÓN", "talle": "XL", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "VISÓN", "talle": "XXL", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "VISÓN", "talle": "XXXL", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "VISÓN", "talle": "4XL", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "ARENA", "talle": "M", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "ARENA", "talle": "L", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "ARENA", "talle": "XL", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "ARENA", "talle": "XXL", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "ARENA", "talle": "XXXL", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Camisa Cairo", "color": "ARENA", "talle": "4XL", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "ARENA", "talle": "S", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "ARENA", "talle": "XL", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "ARENA", "talle": "XXL", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "ARENA", "talle": "XXXL", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "VISÓN", "talle": "S", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "VISÓN", "talle": "M", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "VISÓN", "talle": "XL", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "VISÓN", "talle": "XXL", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Pantalón Cairo", "color": "VISÓN", "talle": "XXXL", "cantidad_solicitada": 1 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "creado_en": "2026-07-15T00:00:00Z"
+}

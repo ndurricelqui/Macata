@@ -103,6 +103,14 @@
       "fecha_entrega_esperada": null,
       "total": 55,
       "estado": "pendiente"
+    },
+    {
+      "id": "Pedido #41339 - 15.07.26",
+      "proveedor": null,
+      "fecha_emision": "2026-07-15",
+      "fecha_entrega_esperada": null,
+      "total": 79,
+      "estado": "pendiente"
     }
   ]
 }
