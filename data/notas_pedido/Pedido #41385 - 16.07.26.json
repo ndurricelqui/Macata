@@ -1,0 +1,31 @@
+{
+  "id": "Pedido #41385 - 16.07.26",
+  "numero_pedido": "41385",
+  "fecha_emision": "2026-07-16",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Jean Worker", "color": "DENIM", "talle": "38", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Jean Worker", "color": "DENIM", "talle": "40", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Jean Worker", "color": "DENIM", "talle": "44", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Jean Worker", "color": "DENIM", "talle": "46", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Jean Worker", "color": "DENIM", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Jean Worker", "color": "DENIM", "talle": "50", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Jean Worker (t. 52-54)", "color": "DENIM", "talle": "52", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Jean Worker (t. 52-54)", "color": "DENIM", "talle": "54", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Jean Worker (t. 56-60)", "color": "DENIM", "talle": "56", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Jean Worker (t. 56-60)", "color": "DENIM", "talle": "58", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Camisa de Jean", "color": "DENIM", "talle": "40", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de Jean", "color": "DENIM", "talle": "44", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Camisa de Jean (t. 50-56)", "color": "DENIM", "talle": "52", "cantidad_solicitada": 5 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "creado_en": "2026-07-16T00:00:00Z"
+}
