@@ -1,14 +1,6 @@
 {
   "notas": [
     {
-      "id": "Pedido #39773 - 21.05.26",
-      "proveedor": null,
-      "fecha_emision": "2026-05-21",
-      "fecha_entrega_esperada": null,
-      "total": 174,
-      "estado": "pendiente"
-    },
-    {
       "id": "Pedido #40141 - 02.06.26",
       "proveedor": null,
       "fecha_emision": "2026-06-02",
@@ -25,35 +17,11 @@
       "estado": "pendiente"
     },
     {
-      "id": "Pedido #40782 - 24.06.26",
-      "proveedor": null,
-      "fecha_emision": "2026-06-24",
-      "fecha_entrega_esperada": null,
-      "total": 24,
-      "estado": "pendiente"
-    },
-    {
       "id": "Pedido #40889 - 27.06.26",
       "proveedor": null,
       "fecha_emision": "2026-06-27",
       "fecha_entrega_esperada": null,
       "total": 25,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #40915 - 29.06.26",
-      "proveedor": null,
-      "fecha_emision": "2026-06-29",
-      "fecha_entrega_esperada": null,
-      "total": 45,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #41122 - 06.07.26",
-      "proveedor": null,
-      "fecha_emision": "2026-07-06",
-      "fecha_entrega_esperada": null,
-      "total": 59,
       "estado": "pendiente"
     },
     {
