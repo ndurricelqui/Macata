@@ -1,0 +1,30 @@
+{
+  "id": "Pedido #41996 - 06.08.26",
+  "numero_pedido": "41996",
+  "fecha_emision": "2026-08-06",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Bombacha Dama", "color": "BEIGE", "talle": "34", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Dama", "color": "BEIGE", "talle": "36", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Bombacha Dama", "color": "BEIGE", "talle": "38", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Bombacha Dama", "color": "BEIGE", "talle": "40", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Dama", "color": "BEIGE", "talle": "42", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha niño PAMPERO", "color": "BEIGE", "talle": "2", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Bombacha niño PAMPERO", "color": "BEIGE", "talle": "4", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha niño PAMPERO", "color": "BEIGE", "talle": "6", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha niño PAMPERO", "color": "BEIGE", "talle": "8", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha niño PAMPERO", "color": "BEIGE", "talle": "12", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha niño PAMPERO", "color": "BEIGE", "talle": "14", "cantidad_solicitada": 3 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)",
+  "creado_en": "2026-08-06T00:00:00Z"
+}
