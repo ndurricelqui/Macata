@@ -1,0 +1,20 @@
+{
+  "id": "Pedido #42041 - 07.08.26",
+  "numero_pedido": "42041",
+  "fecha_emision": "2026-08-07",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Cargo Cazador", "color": "AZUL MARINO", "talle": "42", "cantidad_solicitada": 15 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 0
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)",
+  "creado_en": "2026-08-07T00:00:00Z"
+}
