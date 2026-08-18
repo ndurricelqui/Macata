@@ -33,30 +33,6 @@
       "estado": "pendiente"
     },
     {
-      "id": "Pedido #41664 - 27.07.26",
-      "proveedor": null,
-      "fecha_emision": "2026-07-27",
-      "fecha_entrega_esperada": null,
-      "total": 25,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #41666 - 27.07.26",
-      "proveedor": null,
-      "fecha_emision": "2026-07-27",
-      "fecha_entrega_esperada": null,
-      "total": 25,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #41737 - 29.07.26",
-      "proveedor": null,
-      "fecha_emision": "2026-07-29",
-      "fecha_entrega_esperada": null,
-      "total": 40,
-      "estado": "pendiente"
-    },
-    {
       "id": "Pedido #41738 - 29.07.26",
       "proveedor": null,
       "fecha_emision": "2026-07-29",
@@ -70,14 +46,6 @@
       "fecha_emision": "2026-07-30",
       "fecha_entrega_esperada": null,
       "total": 85,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #41893 - 03.08.26",
-      "proveedor": null,
-      "fecha_emision": "2026-08-03",
-      "fecha_entrega_esperada": null,
-      "total": 30,
       "estado": "pendiente"
     },
     {
