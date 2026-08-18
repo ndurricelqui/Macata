@@ -1,0 +1,46 @@
+{
+  "id": "Pedido #42350 - 18.08.26",
+  "numero_pedido": "42350",
+  "fecha_emision": "2026-08-18",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    {
+      "codigo": null,
+      "descripcion": "Cargo Ripstop",
+      "color": "AZUL MARINO",
+      "talle": "48",
+      "cantidad_solicitada": 10
+    },
+    {
+      "codigo": null,
+      "descripcion": "Cargo Ripstop",
+      "color": "VERDE",
+      "talle": "48",
+      "cantidad_solicitada": 5
+    },
+    {
+      "codigo": null,
+      "descripcion": "Cargo Ripstop",
+      "color": "BEIGE",
+      "talle": "44",
+      "cantidad_solicitada": 5
+    },
+    {
+      "codigo": null,
+      "descripcion": "Cargo Ripstop",
+      "color": "BEIGE",
+      "talle": "46",
+      "cantidad_solicitada": 5
+    }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 25
+  },
+  "creado_en": "2026-08-18T00:00:00"
+}
