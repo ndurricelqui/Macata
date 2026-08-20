@@ -1,9 +1,750 @@
-<!DOCTYPE html>
-<html>
+﻿<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta http-equiv="refresh" content="0; url=tablero-macata-stock-fixed-v2.html">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231e3a5f'/%3E%3Ctext x='32' y='46' font-family='system-ui,sans-serif' font-size='42' font-weight='700' text-anchor='middle' fill='%23ffffff'%3EM%3C/text%3E%3C/svg%3E">
+<title>Tablero de Stock - Macata</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #e8eef5; color: #1e293b; }
+  header { background: linear-gradient(135deg, #162f4e 0%, #1e3a5f 100%); color: #fff; padding: 20px 32px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 10px rgba(0,0,0,.22); }
+  header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: .03em; }
+  header span { font-size: .82rem; opacity: .65; margin-left: auto; }
+  .tabs { display: flex; gap: 6px; padding: 28px 32px 0; }
+  .tab-btn { padding: 9px 22px; border: none; border-radius: 8px 8px 0 0; cursor: pointer;
+             font-size: .88rem; font-weight: 600; background: #c4d4e4; color: #3a566e; transition: .18s; }
+  .tab-btn.active { background: #fff; color: #1e3a5f; box-shadow: 0 -3px 0 #1e3a5f inset; }
+  .tab-btn:hover:not(.active) { background: #b3c7da; color: #1e3a5f; }
+  .tab-content { display: none; background: #fff; margin: 0 32px 32px;
+                 border-radius: 0 12px 12px 12px; box-shadow: 0 3px 18px rgba(0,0,0,.11); padding: 20px; }
+  .tab-content.active { display: block; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: .73rem; font-weight: 600; }
+  .badge-pendiente { background: #fef3c7; color: #b45309; }
+  .badge-recibido  { background: #dcfce7; color: #15803d; }
+  .badge-parcial   { background: #dbeafe; color: #1d4ed8; }
+  .np-card { border: 1px solid #d8e5f0; border-radius: 10px; margin-bottom: 14px; overflow: hidden; box-shadow: 0 1px 5px rgba(0,0,0,.07); }
+  .np-header { background: #f3f8fc; padding: 13px 18px; display: flex; gap: 16px;
+               align-items: center; cursor: pointer; flex-wrap: wrap; }
+  .np-header:hover { background: #e8f1f9; }
+  .np-title { font-weight: 700; color: #1e3a5f; font-size: .95rem; }
+  .np-meta  { font-size: .78rem; color: #64748b; }
+  .np-body  { display: none; padding: 0 18px 14px; }
+  .np-body.open { display: block; }
+  table.np-table { width: 100%; border-collapse: collapse; font-size: .83rem; margin-top: 8px; }
+  table.np-table th { padding: 8px 10px; text-align: left; font-weight: 600; color: #475569;
+                      border-bottom: 2px solid #d8e5f0; background: #f3f8fc; }
+  table.np-table td { padding: 6px 10px; border-bottom: 1px solid #f0f5f9; }
+  .grp-item-hdr td { background: #f3f8fc; font-weight: 600; color: #334155;
+                     border-top: 1px solid #d8e5f0; cursor: pointer; }
+  .grp-item-hdr:hover td { background: #e8f1f9; }
+  .grp-row.hidden { display: none; }
+  .grp-arr { font-size: .7rem; color: #64748b; }
+  .fam-block { border: 1px solid #d8e5f0; border-radius: 10px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .fam-hdr { background: linear-gradient(90deg, #1a3457 0%, #1e3a5f 100%); color: #fff; padding: 13px 20px;
+             display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .fam-hdr:hover { background: linear-gradient(90deg, #1e3f6a 0%, #245082 100%); }
+  .fam-title { font-size: .95rem; font-weight: 700; flex: 1; }
+  .fam-total { font-size: .88rem; font-weight: 600; opacity: .85; }
+  .fam-arr { font-size: .8rem; opacity: .6; }
+  .fam-body { padding: 14px 16px 16px; overflow-x: auto; }
+  .fam-body.closed { display: none; }
+  table.matrix-table { border-collapse: collapse; font-size: .82rem; min-width: 100%; }
+  table.matrix-table th { padding: 8px 10px; background: #e8f1f9; color: #3a566e;
+                           font-weight: 600; border: 1px solid #d8e5f0;
+                           text-align: center; white-space: nowrap; }
+  table.matrix-table th.col-color { text-align: left; }
+  table.matrix-table td { padding: 6px 10px; border: 1px solid #e8f1f9;
+                          text-align: center; white-space: nowrap; }
+  table.matrix-table td.color-cell { text-align: left; font-weight: 500; background: #f6fafd; }
+  table.matrix-table tr.total-row td { background: #e8f1f9; font-weight: 700; border-top: 2px solid #bdd0e3; }
+  table.matrix-table td.total-col, table.matrix-table th.total-col {
+    background: #ddeaf8; font-weight: 700; border-left: 2px solid #b4cde8; }
+  .ok   { color: #16a34a; }
+  .zero { color: #cbd5e1; }
+  .neg  { color: #dc2626; font-weight: 600; }
+  .cov-ok   { background: #dcfce7; color: #15803d; font-weight: 600; }
+  .cov-warn { background: #fef3c7; color: #b45309; font-weight: 600; }
+  .cov-bad  { background: #fee2e2; color: #dc2626; font-weight: 600; }
+  table.matrix-table td.cov-ok.total-col   { background: #bbf0d1; }
+  table.matrix-table td.cov-warn.total-col { background: #fde59c; }
+  table.matrix-table td.cov-bad.total-col  { background: #fdc9c9; }
+  table.matrix-table tr.total-row td.cov-ok   { background: #bbf0d1; }
+  table.matrix-table tr.total-row td.cov-warn { background: #fde59c; }
+  table.matrix-table tr.total-row td.cov-bad  { background: #fdc9c9; }
+  #proy-tt { display:none; position:fixed; z-index:9999; background:#1e293b; color:#f1f5f9;
+             border-radius:12px; padding:18px 24px; font-size:.92rem; line-height:1.8;
+             box-shadow:0 8px 32px rgba(0,0,0,.45); min-width:270px; cursor:default; }
+  #proy-tt .tt-title { font-size:.72rem; color:#94a3b8; text-transform:uppercase;
+                       letter-spacing:.07em; margin-bottom:9px; }
+  #proy-tt table { border-collapse:collapse; width:100%; }
+  #proy-tt td { padding:2px 0; }
+  #proy-tt td.tt-val { text-align:right; font-weight:700; padding-left:24px; font-size:1rem; }
+  #proy-tt .tt-sep { height:1px; background:#334155; margin:5px 0; }
+  #proy-tt .tt-total td { border-top:1px solid #475569; padding-top:7px; font-weight:700; color:#fff; }
+  .proy-period-bar { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .proy-period-label { font-size:.82rem; color:#64748b; font-weight:600; margin-right:4px; }
+  .proy-period-btn { padding:6px 16px; border:1px solid #c4d4e4; border-radius:20px; cursor:pointer;
+                      font-size:.82rem; font-weight:600; background:#f3f8fc; color:#3a566e; transition:.15s; }
+  .proy-period-btn:hover:not(.active) { background:#e8f1f9; }
+  .proy-period-btn.active { background:#1e3a5f; border-color:#1e3a5f; color:#fff; }
+  .proy-lookback-btn { padding:6px 14px; border:1px solid #c4d4e4; border-radius:20px; cursor:pointer;
+                      font-size:.8rem; font-weight:600; background:#f3f8fc; color:#3a566e; transition:.15s; }
+  .proy-lookback-btn:hover:not(.active) { background:#e8f1f9; }
+  .proy-lookback-btn.active { background:#3a566e; border-color:#3a566e; color:#fff; }
+</style>
 </head>
-<body>
-  <a href="tablero-macata-stock-fixed-v2.html">Ir al tablero</a>
+<body><header>
+  <h1>Tablero de Stock - Macata</h1>
+  <span>Stock al: 2026-06-05T17:33:20</span>
+</header>
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('notas',this)">Notas de Pedido</button>
+  <button class="tab-btn" onclick="showTab('stock',this)">Stock Real</button>
+  <button class="tab-btn" onclick="showTab('proyectado',this)">Stock Proyectado</button>
+  <button class="tab-btn" onclick="showTab('pedido',this)">Stock Pedido</button>
+</div>
+<div id="tab-notas" class="tab-content active"><div id="np-list"></div></div>
+<div id="tab-stock" class="tab-content"><div id="stock-list"></div></div>
+<div id="tab-proyectado" class="tab-content">
+  <div class="proy-period-bar">
+    <span class="proy-period-label">Proyecci&oacute;n a:</span>
+    <button class="proy-period-btn active" data-period="7" onclick="setProyPeriod(7,this)">7 d&iacute;as</button>
+    <button class="proy-period-btn" data-period="15" onclick="setProyPeriod(15,this)">15 d&iacute;as</button>
+    <button class="proy-period-btn" data-period="30" onclick="setProyPeriod(30,this)">30 d&iacute;as</button>
+    <span class="proy-period-label" style="margin-left:18px">Base de ventas:</span>
+    <button class="proy-lookback-btn" data-lookback="30" onclick="setVentasLookback(30,this)">&Uacute;lt. 30 d&iacute;as</button>
+    <button class="proy-lookback-btn" data-lookback="60" onclick="setVentasLookback(60,this)">&Uacute;lt. 60 d&iacute;as</button>
+    <button class="proy-lookback-btn active" data-lookback="90" onclick="setVentasLookback(90,this)">&Uacute;lt. 90 d&iacute;as</button>
+    <button class="proy-lookback-btn" data-lookback="120" onclick="setVentasLookback(120,this)">&Uacute;lt. 120 d&iacute;as</button>
+  </div>
+  <div id="proy-list"></div>
+</div>
+<div id="tab-pedido" class="tab-content"><div id="pedido-list"></div></div>
+<script>var NOTAS = [{"id":"Pedido #41126 - 06.07.26","numero_pedido":"41126","fecha_emision":"2026-07-06","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Cargo Ripstop (t. 56-60)","color":"NEGRO","talle":"56","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"42","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"46","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"48","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"50","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"52","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"54","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"42","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"46","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"50","cantidad_solicitada":5}],"totales":{"subtotal":0,"iva":0,"total":0},"creado_en":"2026-07-06T00:00:00Z"},{"id":"Pedido #41211 - 08.07.26","numero_pedido":"41211","fecha_emision":"2026-07-08","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Cargo Cazador","color":"AZUL MARINO","talle":"40","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Cazador","color":"VERDE","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"VERDE","talle":"46","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Cazador","color":"VERDE","talle":"48","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"BEIGE","talle":"48","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"40","cantidad_solicitada":3},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"42","cantidad_solicitada":3},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"44","cantidad_solicitada":3},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"48","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"50","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"54","cantidad_solicitada":3}],"totales":{"subtotal":0,"iva":0,"total":0},"creado_en":"2026-07-08T00:00:00Z"},{"id":"Pedido #41385 - 16.07.26","numero_pedido":"41385","fecha_emision":"2026-07-16","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Jean Worker","color":"DENIM","talle":"38","cantidad_solicitada":1},{"codigo":null,"descripcion":"Jean Worker","color":"DENIM","talle":"40","cantidad_solicitada":2},{"codigo":null,"descripcion":"Jean Worker","color":"DENIM","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Jean Worker","color":"DENIM","talle":"46","cantidad_solicitada":5},{"codigo":null,"descripcion":"Jean Worker","color":"DENIM","talle":"48","cantidad_solicitada":5},{"codigo":null,"descripcion":"Jean Worker","color":"DENIM","talle":"50","cantidad_solicitada":5},{"codigo":null,"descripcion":"Jean Worker (t. 52-54)","color":"DENIM","talle":"52","cantidad_solicitada":3},{"codigo":null,"descripcion":"Jean Worker (t. 52-54)","color":"DENIM","talle":"54","cantidad_solicitada":2},{"codigo":null,"descripcion":"Jean Worker (t. 56-60)","color":"DENIM","talle":"56","cantidad_solicitada":2},{"codigo":null,"descripcion":"Jean Worker (t. 56-60)","color":"DENIM","talle":"58","cantidad_solicitada":2},{"codigo":null,"descripcion":"Camisa de Jean","color":"DENIM","talle":"40","cantidad_solicitada":5},{"codigo":null,"descripcion":"Camisa de Jean","color":"DENIM","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Camisa de Jean (t. 50-56)","color":"DENIM","talle":"52","cantidad_solicitada":5}],"totales":{"subtotal":0,"iva":0,"total":0},"creado_en":"2026-07-16T00:00:00Z"},{"id":"Pedido #41738 - 29.07.26","numero_pedido":"41738","fecha_emision":"2026-07-29","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"38","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"40","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"42","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"46","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Cazador","color":"NEGRO","talle":"48","cantidad_solicitada":5}],"totales":{"subtotal":0,"iva":0,"total":0},"observaciones":"SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)","creado_en":"2026-07-29T00:00:00Z"},{"id":"Pedido #41777 - 30.07.26","numero_pedido":"41777","fecha_emision":"2026-07-30","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"42","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"44","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"46","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"42","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"44","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"46","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"48","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"50","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"NEGRO","talle":"52","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"VERDE","talle":"48","cantidad_solicitada":10}],"totales":{"subtotal":0,"iva":0,"total":0},"observaciones":"SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)","creado_en":"2026-07-30T00:00:00Z"},{"id":"Pedido #41996 - 06.08.26","numero_pedido":"41996","fecha_emision":"2026-08-06","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Bombacha Dama","color":"BEIGE","talle":"34","cantidad_solicitada":5},{"codigo":null,"descripcion":"Bombacha Dama","color":"BEIGE","talle":"36","cantidad_solicitada":10},{"codigo":null,"descripcion":"Bombacha Dama","color":"BEIGE","talle":"38","cantidad_solicitada":10},{"codigo":null,"descripcion":"Bombacha Dama","color":"BEIGE","talle":"40","cantidad_solicitada":5},{"codigo":null,"descripcion":"Bombacha Dama","color":"BEIGE","talle":"42","cantidad_solicitada":5},{"codigo":null,"descripcion":"Bombacha niño PAMPERO","color":"BEIGE","talle":"2","cantidad_solicitada":2},{"codigo":null,"descripcion":"Bombacha niño PAMPERO","color":"BEIGE","talle":"4","cantidad_solicitada":3},{"codigo":null,"descripcion":"Bombacha niño PAMPERO","color":"BEIGE","talle":"6","cantidad_solicitada":3},{"codigo":null,"descripcion":"Bombacha niño PAMPERO","color":"BEIGE","talle":"8","cantidad_solicitada":3},{"codigo":null,"descripcion":"Bombacha niño PAMPERO","color":"BEIGE","talle":"12","cantidad_solicitada":3},{"codigo":null,"descripcion":"Bombacha niño PAMPERO","color":"BEIGE","talle":"14","cantidad_solicitada":3}],"totales":{"subtotal":0,"iva":0,"total":0},"observaciones":"SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)","creado_en":"2026-08-06T00:00:00Z"},{"id":"Pedido #42041 - 07.08.26","numero_pedido":"42041","fecha_emision":"2026-08-07","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Cargo Cazador","color":"AZUL MARINO","talle":"42","cantidad_solicitada":15}],"totales":{"subtotal":0,"iva":0,"total":0},"observaciones":"SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)","creado_en":"2026-08-07T00:00:00Z"},{"id":"Pedido #42350 - 18.08.26","numero_pedido":"42350","fecha_emision":"2026-08-18","proveedor":{"nombre":null,"cuit":null},"estado":"pendiente","items":[{"codigo":null,"descripcion":"Cargo Ripstop","color":"AZUL MARINO","talle":"48","cantidad_solicitada":10},{"codigo":null,"descripcion":"Cargo Ripstop","color":"VERDE","talle":"48","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"44","cantidad_solicitada":5},{"codigo":null,"descripcion":"Cargo Ripstop","color":"BEIGE","talle":"46","cantidad_solicitada":5}],"totales":{"subtotal":0,"iva":0,"total":25},"creado_en":"2026-08-18T00:00:00"}];
+var PROY = [{"familia":"Pantalón de trabajo","color":"AERO","talle":"56","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"50","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"52","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Cazador","color":"BEIGE","talle":"58","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Bombacha lisa","color":"BEIGE","talle":"48","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Camisa de trabajo","color":"AERO","talle":"40","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"58","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Bombacha lisa","color":"VERDE","talle":"42","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"54","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo Cazador","color":"VERDE","talle":"42","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"CRUDO","talle":"60","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Cazador","color":"BEIGE","talle":"52","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Cazador","color":"NEGRO","talle":"52","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"52","real":16,"np_pendiente":0,"proyectado":16},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"40","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"58","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"54","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Cargo Ripstop","color":"VERDE","talle":"46","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"46","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Ripstop","color":"VERDE","talle":"38","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo Ripstop","color":"VERDE","talle":"58","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Cazador","color":"BEIGE","talle":"56","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo Cazador","color":"VERDE","talle":"58","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"56","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo elastizado fit","color":"GRIS","talle":"46","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"54","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"AERO","talle":"48","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"44","real":-3,"np_pendiente":0,"proyectado":-3},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"42","real":11,"np_pendiente":0,"proyectado":11},{"familia":"Cargo Ripstop","color":"VERDE","talle":"42","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"48","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"58","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"48","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Camisa de trabajo","color":"VERDE","talle":"52","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Pantalón de trabajo","color":"AERO","talle":"44","real":18,"np_pendiente":0,"proyectado":18},{"familia":"Cargo Cazador","color":"VERDE","talle":"38","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"38","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Bombacha lisa","color":"BEIGE","talle":"10","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo elastizado fit","color":"VERDE","talle":"42","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"40","real":16,"np_pendiente":0,"proyectado":16},{"familia":"Bombacha lisa","color":"VERDE","talle":"58","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"48","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Cazador","color":"NEGRO","talle":"46","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"60","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo elastizado fit","color":"NEGRO","talle":"50","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Cazador","color":"BEIGE","talle":"48","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Cargo Cazador","color":"VERDE","talle":"46","real":-2,"np_pendiente":0,"proyectado":-2},{"familia":"Camisa de trabajo","color":"AERO","talle":"58","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"42","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"46","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Camisa de trabajo","color":"VERDE","talle":"38","real":14,"np_pendiente":0,"proyectado":14},{"familia":"Cargo Ripstop","color":"AZUL/ROJO","talle":"50","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"50","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Bombacha lisa","color":"VERDE","talle":"14","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"AERO","talle":"42","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Cargo Cazador","color":"NEGRO","talle":"42","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"56","real":19,"np_pendiente":0,"proyectado":19},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"38","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo elastizado fit","color":"VERDE","talle":"48","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"54","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"40","real":-3,"np_pendiente":0,"proyectado":-3},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"46","real":33,"np_pendiente":0,"proyectado":33},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"48","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Cargo Ripstop","color":"VERDE","talle":"50","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"52","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Cazador","color":"GRIS","talle":"42","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"38","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"50","real":15,"np_pendiente":0,"proyectado":15},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"44","real":17,"np_pendiente":0,"proyectado":17},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"54","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"AERO","talle":"46","real":16,"np_pendiente":0,"proyectado":16},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"40","real":19,"np_pendiente":0,"proyectado":19},{"familia":"Cargo elastizado fit","color":"VERDE","talle":"50","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"52","real":-2,"np_pendiente":0,"proyectado":-2},{"familia":"Cargo elastizado fit","color":"GRIS","talle":"40","real":-3,"np_pendiente":0,"proyectado":-3},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"40","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Bombacha lisa","color":"BEIGE","talle":"8","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Camisa de trabajo","color":"VERDE","talle":"56","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"58","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"54","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"48","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo elastizado fit","color":"VERDE","talle":"46","real":15,"np_pendiente":0,"proyectado":15},{"familia":"Cargo Cazador","color":"BEIGE","talle":"50","real":-3,"np_pendiente":0,"proyectado":-3},{"familia":"Bombacha lisa","color":"BEIGE","talle":"40","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"52","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"52","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"46","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"50","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Camisa de trabajo","color":"VERDE","talle":"54","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"54","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo elastizado fit","color":"NEGRO","talle":"48","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"44","real":34,"np_pendiente":0,"proyectado":34},{"familia":"Bombacha lisa","color":"BEIGE","talle":"42","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Bombacha lisa","color":"VERDE","talle":"38","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"36","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"56","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"58","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"42","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"AERO","talle":"54","real":28,"np_pendiente":0,"proyectado":28},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"50","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Cazador","color":"GRIS","talle":"52","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"VERDE","talle":"52","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"40","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"56","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"40","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Pantalón de trabajo","color":"AERO","talle":"54","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Bombacha lisa","color":"BEIGE","talle":"6","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"46","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"40","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"50","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Cargo elastizado fit","color":"VERDE","talle":"38","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"52","real":20,"np_pendiente":0,"proyectado":20},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"48","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Cargo Cazador","color":"NEGRO","talle":"50","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"VERDE","talle":"58","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"38","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Cazador","color":"GRIS OSCURO","talle":"52","real":-1,"np_pendiente":0,"proyectado":-1},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"50","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"42","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo elastizado fit","color":"VERDE","talle":"40","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"44","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"48","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Cargo Ripstop","color":"VERDE","talle":"48","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"48","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Bombacha lisa","color":"NEGRO","talle":"10","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"BEIGE","talle":"44","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"VERDE","talle":"46","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"54","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"54","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"38","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Pantalón de trabajo","color":"AERO","talle":"48","real":20,"np_pendiente":0,"proyectado":20},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"46","real":0,"np_pendiente":0,"proyectado":0},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"46","real":25,"np_pendiente":0,"proyectado":25},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"50","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"BEIGE","talle":"2","real":-1,"np_pendiente":0,"proyectado":-1},{"familia":"Cargo Cazador","color":"BEIGE","talle":"40","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"62","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Bombacha lisa","color":"BEIGE","talle":"58","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Cazador","color":"BEIGE","talle":"42","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"VERDE","talle":"36","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"AERO","talle":"38","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"46","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Pantalón de trabajo","color":"AERO","talle":"52","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"60","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"60","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"48","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"56","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"40","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Camisa de trabajo","color":"VERDE","talle":"42","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Cargo Cazador","color":"VERDE","talle":"48","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"42","real":28,"np_pendiente":0,"proyectado":28},{"familia":"Cargo Cazador","color":"VERDE","talle":"52","real":-2,"np_pendiente":0,"proyectado":-2},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"44","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"40","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"38","real":22,"np_pendiente":0,"proyectado":22},{"familia":"Camisa de trabajo","color":"VERDE","talle":"50","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"50","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Cazador","color":"BEIGE","talle":"38","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"56","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"58","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Bombacha lisa","color":"BEIGE","talle":"50","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"60","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"54","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"AERO","talle":"52","real":11,"np_pendiente":0,"proyectado":11},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"58","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"38","real":24,"np_pendiente":0,"proyectado":24},{"familia":"Cargo Cazador","color":"BEIGE","talle":"44","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Bombacha lisa","color":"BEIGE","talle":"54","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"38","real":16,"np_pendiente":0,"proyectado":16},{"familia":"Cargo elastizado fit","color":"GRIS","talle":"42","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"42","real":18,"np_pendiente":0,"proyectado":18},{"familia":"Pantalón de trabajo","color":"AERO","talle":"58","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"58","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"AERO","talle":"56","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"44","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Bombacha lisa","color":"NEGRO","talle":"8","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"40","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Bombacha lisa","color":"NEGRO","talle":"12","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"AERO","talle":"46","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Camisa de trabajo","color":"VERDE","talle":"48","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"38","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"44","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"44","real":11,"np_pendiente":0,"proyectado":11},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"60","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"38","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo elastizado fit","color":"GRIS","talle":"52","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"BEIGE","talle":"56","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"44","real":25,"np_pendiente":0,"proyectado":25},{"familia":"Cargo elastizado fit","color":"NEGRO","talle":"46","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Camisa de trabajo","color":"VERDE","talle":"36","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"46","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"48","real":39,"np_pendiente":0,"proyectado":39},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"42","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Ripstop","color":"VERDE","talle":"44","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"46","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Cazador","color":"GRIS","talle":"48","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"40","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"44","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"52","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"AERO","talle":"38","real":27,"np_pendiente":0,"proyectado":27},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"52","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"58","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"56","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Camisa de trabajo","color":"AERO","talle":"60","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"54","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"50","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo elastizado fit","color":"GRIS","talle":"38","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Pantalón de trabajo","color":"AZUL MARINO","talle":"38","real":24,"np_pendiente":0,"proyectado":24},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"48","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"46","real":41,"np_pendiente":0,"proyectado":41},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"52","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Pantalón de trabajo","color":"AERO","talle":"40","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"50","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"52","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"42","real":11,"np_pendiente":0,"proyectado":11},{"familia":"Cargo Cazador","color":"VERDE","talle":"50","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo elastizado fit","color":"NEGRO","talle":"52","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Cazador","color":"BEIGE","talle":"46","real":-6,"np_pendiente":0,"proyectado":-6},{"familia":"Pantalón de trabajo","color":"BEIGE","talle":"54","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo Ripstop","color":"VERDE","talle":"40","real":14,"np_pendiente":0,"proyectado":14},{"familia":"Pantalón de trabajo","color":"AERO","talle":"50","real":16,"np_pendiente":0,"proyectado":16},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"42","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"46","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"50","real":11,"np_pendiente":0,"proyectado":11},{"familia":"Pantalón de trabajo","color":"AERO","talle":"60","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"AERO","talle":"50","real":13,"np_pendiente":0,"proyectado":13},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"40","real":22,"np_pendiente":0,"proyectado":22},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"42","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"VERDE","talle":"44","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Cargo Ripstop","color":"VERDE","talle":"60","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"BEIGE","talle":"12","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Camisa de trabajo","color":"AERO","talle":"44","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"46","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"44","real":18,"np_pendiente":0,"proyectado":18},{"familia":"Bombacha lisa","color":"VERDE","talle":"36","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Cazador","color":"VERDE","talle":"56","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Bombacha lisa","color":"VERDE","talle":"52","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Bombacha lisa","color":"VERDE","talle":"44","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo Cazador","color":"NEGRO","talle":"44","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Camisa de trabajo","color":"BLANCO","talle":"42","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"48","real":14,"np_pendiente":0,"proyectado":14},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"42","real":-1,"np_pendiente":0,"proyectado":-1},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"42","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Cazador","color":"AZUL MARINO","talle":"56","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Bombacha lisa","color":"BEIGE","talle":"36","real":-1,"np_pendiente":0,"proyectado":-1},{"familia":"Bombacha lisa","color":"VERDE","talle":"50","real":-1,"np_pendiente":0,"proyectado":-1},{"familia":"Cargo elastizado fit","color":"NEGRO","talle":"44","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"48","real":-1,"np_pendiente":0,"proyectado":-1},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"52","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"50","real":4,"np_pendiente":0,"proyectado":4},{"familia":"Cargo elastizado fit","color":"NEGRO","talle":"42","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Pantalón de trabajo","color":"VERDE","talle":"56","real":12,"np_pendiente":0,"proyectado":12},{"familia":"Cargo elastizado fit","color":"AZUL MARINO","talle":"38","real":7,"np_pendiente":0,"proyectado":7},{"familia":"Bombacha lisa","color":"HUMAN","talle":"60","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Cazador","color":"NEGRO","talle":"54","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"44","real":15,"np_pendiente":0,"proyectado":15},{"familia":"Cargo Ripstop","color":"NEGRO","talle":"60","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Cargo Ripstop","color":"AZUL MARINO","talle":"46","real":8,"np_pendiente":0,"proyectado":8},{"familia":"Bombacha lisa","color":"NEGRO","talle":"6","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"52","real":22,"np_pendiente":0,"proyectado":22},{"familia":"Cargo Cazador","color":"NEGRO","talle":"40","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Bombacha lisa","color":"AZUL MARINO","talle":"58","real":1,"np_pendiente":0,"proyectado":1},{"familia":"Camisa de trabajo","color":"AERO","talle":"42","real":9,"np_pendiente":0,"proyectado":9},{"familia":"Bombacha lisa","color":"BEIGE","talle":"52","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Bombacha lisa","color":"BEIGE","talle":"4","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo Cazador","color":"NEGRO","talle":"48","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"38","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Pantalón de trabajo","color":"BLANCO","talle":"52","real":10,"np_pendiente":0,"proyectado":10},{"familia":"Camisa de trabajo","color":"VERDE","talle":"46","real":3,"np_pendiente":0,"proyectado":3},{"familia":"Cargo Cazador","color":"VERDE","talle":"40","real":6,"np_pendiente":0,"proyectado":6},{"familia":"Cargo elastizado fit","color":"BEIGE","talle":"54","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Camisa de trabajo","color":"BEIGE","talle":"50","real":21,"np_pendiente":0,"proyectado":21},{"familia":"Camisa de trabajo","color":"AZUL MARINO","talle":"60","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Bombacha lisa","color":"VERDE","talle":"48","real":5,"np_pendiente":0,"proyectado":5},{"familia":"Cargo Ripstop","color":"BEIGE","talle":"60","real":2,"np_pendiente":0,"proyectado":2},{"familia":"Cargo Cazador","color":"NEGRO","talle":"38","real":5,"np_pendiente":0,"proyectado":5}];
+var ORDEN_FAMILIAS = ["Cargo Ripstop","Cargo Cazador","Bombacha lisa","Bombacha dama","Cargo elastizado fit","Pantalon de trabajo","Camisa de trabajo"];
+var SHEETS_ID_STOCK  = '1P7nx8LWnT9eb4VoIAAIMtlC58qHjaedGYGborsjU1uI';
+var SHEETS_GID_STOCK = '1493271108';
+var SHEETS_ID_VENTAS  = '1ItxTX3VgiTjiJ7hfy3StEp4BAg7WRoztqbm4e6Q7Iew';
+var SHEETS_GID_VENTAS = '980042774';
+var FAM_DESC_MAP = [
+  { fam: 'Cargo Ripstop',        descs: ['PANTALON CARGO RIPSTOP CH (38-54) PAMPERO','PANTALON CARGO RIPSTOP GR (56-60) PAMPERO'] },
+  { fam: 'Cargo Cazador',        descs: ['PANTALON CAZ. CARGO II H. PAMPERO AZUL CH (36-54)','PANTALON CAZADOR CARGO II H. PAMPERO CHICO (36-54)','PANTALON CAZ. CARGO II H. PAMPER AZUL GD (56-70)','PANTALON CAZADOR CARGO II H. PAMPERO GRANDE (56-70)'] },
+  { fam: 'Bombacha lisa',        descs: ['BOMBACHA LISA HOMBRE PAMPERO (38-54)','BOMBACHA LISA H. PAMPERO AZUL (38-54)','BOMBACHA LISA HOMBRE PAMPERO (56-60)','BOMBACHA LISA H.PAMPERO AZUL (56-60)','BOMBACHA LISA NIÑO PAMPERO'] },
+  { fam: 'Bombacha dama',        descs: ['BOMBACHA LISA MUJER PAMPERO'] },
+  { fam: 'Cargo elastizado fit', descs: ['PANTALON CARGO ELASTIZADO PAMPERO FIT'] },
+  { fam: 'Pantalon de trabajo',  descs: ['PANTALON DE TRAB. H. PAMPERO AZUL CH(36-60)','PANTALON DE TRABAJO HOMBRE PAMPERO CH(36-60)'] },
+  { fam: 'Camisa de trabajo',    descs: ['CAMISA DE TRAB H.M/L PAMPERO AZUL CH(38-48)','CAMISA DE TRAB H.M/L PAMPERO AZUL G(58-70)','CAMISA DE TRAB H.M/L PAMPERO AZUL M(50-56)','CAMISA DE TRABAJO H. M/L PAMPERO CH (36-48)','CAMISA DE TRABAJO H.M/L PAMPERO GRANDE(58-70)','CAMISA DE TRABAJO H.M/L PAMPERO MED.(50-56)'] }
+];
+var _descToFam = {};
+FAM_DESC_MAP.forEach(function(entry) { entry.descs.forEach(function(d){ _descToFam[d]=entry.fam; }); });
+
+window._trelloProyMap={};window._trelloProyTotal=0;window._kpiProyBase=undefined;
+var TRELLO_CODE_FAM={
+  'U034':'Cargo Ripstop','U209':'Cargo Ripstop',
+  'I116':'Cargo Cazador','I115':'Cargo Cazador','I117':'Cargo Cazador','I118':'Cargo Cazador',
+  'I102':'Bombacha lisa','I350':'Bombacha lisa','I351':'Bombacha lisa','I352':'Bombacha lisa','N019':'Bombacha lisa',
+  'U102':'Bombacha dama',
+  'U145':'Cargo elastizado fit',
+  'I036':'Pantalon de trabajo','I037':'Pantalon de trabajo','I038':'Pantalon de trabajo','I039':'Pantalon de trabajo',
+  'IC012':'Camisa de trabajo','IC013':'Camisa de trabajo','IC014':'Camisa de trabajo','IC015':'Camisa de trabajo','IC016':'Camisa de trabajo','IC017':'Camisa de trabajo'
+};
+
+(function(){var ec=0,npa=0;NOTAS.forEach(function(np){if(np.estado==='pendiente'){npa++;(np.items||[]).forEach(function(it){ec+=(it.cantidad_solicitada||0);});}});window._enCamino=ec;var elC=document.getElementById('kpi-en-camino');if(elC)elC.textContent=ec.toLocaleString('es-AR');var elN=document.getElementById('kpi-np-activas');if(elN)elN.textContent=npa;})();
+
+function normCol(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+
+function parseStockNum(v){
+  if(v===null||v===undefined)return 0;
+  if(typeof v==='number')return v;
+  var s=String(v).trim();
+  if(!s)return 0;
+  // Soporta formato argentino: 1.234,50 / -3,00 y formato simple 1234.50
+  var cleaned=s.indexOf(',')!==-1
+    ? s.replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,'')
+    : s.replace(/[^0-9.\-]/g,'');
+  var n=parseFloat(cleaned);
+  return isNaN(n)?0:n;
+}
+
+// Mapa robusto por descripcion normalizada como respaldo.
+var _descToFamNorm={};
+Object.keys(_descToFam||{}).forEach(function(d){_descToFamNorm[normCol(d)]=_descToFam[d];});
+
+function famFromStockRow(articulo,desc){
+  var code=String(articulo||'').trim().toUpperCase();
+  // Principal: mapear por codigo, igual que el tablero de compras. Evita omisiones por cambios en la descripcion.
+  if(TRELLO_CODE_FAM[code])return TRELLO_CODE_FAM[code];
+  // Respaldo: descripcion exacta y normalizada.
+  var d=String(desc||'').trim();
+  var up=d.toUpperCase();
+  if(_descToFam[up])return _descToFam[up];
+  var nd=normCol(d);
+  if(_descToFamNorm[nd])return _descToFamNorm[nd];
+  return null;
+}
+
+function gvizStock(url,ok,fail){
+  var cb='__gviz_sr_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+  var sep=url.indexOf('?')!==-1?'&':'?';
+  var script=document.createElement('script');
+  var timer=setTimeout(function(){try{delete window[cb];}catch(e){window[cb]=undefined;}script.remove();fail(new Error('Timeout al cargar stock desde Sheets.'));},15000);
+  window[cb]=function(data){clearTimeout(timer);try{delete window[cb];}catch(e){window[cb]=undefined;}script.remove();ok(data);};
+  script.onerror=function(){clearTimeout(timer);try{delete window[cb];}catch(e){window[cb]=undefined;}script.remove();fail(new Error('Error al cargar Sheets.'));};
+  script.src=url+sep+'tqx=out:json;responseHandler:'+cb+'&_='+(Date.now());
+  document.head.appendChild(script);
+}
+
+function gvizRowsToRaw(data){
+  if(data.status==='error')throw new Error('Sheets: '+(data.errors||[]).map(function(e){return e.message;}).join(', '));
+  var rows=(data.table&&data.table.rows)||[];
+  var raw=[];
+  rows.forEach(function(row){
+    var c=row&&row.c?row.c:[];
+    function cell(i){return c[i]&&c[i].v!==undefined?c[i].v:'';}
+    // Rango B:I => 0 Articulo, 1 Desc, 2 Color, 3 Color Desc, 4 Talle, 5 Talle Desc, 6 CORDOBA2, 7 CORDOBA
+    var obj={articulo:cell(0),desc:cell(1),color:cell(2),colorDesc:cell(3),talle:cell(4),cordoba2:cell(6),cordoba:cell(7)};
+    if([obj.articulo,obj.desc,obj.color,obj.colorDesc,obj.talle,obj.cordoba2,obj.cordoba].some(function(v){return String(v||'').trim()!=='';}))raw.push(obj);
+  });
+  return raw;
+}
+
+function applyStockRowsMacata(rawRows,sourceLabel){
+  var stockMap={},total=0,omitHeader=0,omitNoArt=0,omitNoFam=0;
+  window._colorCodeToName={};
+  rawRows.forEach(function(r){
+    var articulo=String(r.articulo||'').trim();
+    if(normCol(articulo)==='articulo'){omitHeader++;return;}
+    if(!articulo){omitNoArt++;return;}
+    var fam=famFromStockRow(articulo,r.desc);
+    if(!fam){omitNoFam++;return;}
+    // Para Macata conviene mostrar y cruzar por descripcion de color, porque las NPs usan nombres (BEIGE, NEGRO, AZUL MARINO), no codigos H2/C4/etc.
+    var colorCode=String(r.color||'').trim();
+    var color=String(r.colorDesc||colorCode).trim();
+    if(colorCode&&color)window._colorCodeToName[colorCode.toUpperCase()]=color;
+    var talle=String(r.talle!=null?r.talle:'').trim();
+    var qty=parseStockNum(r.cordoba)+parseStockNum(r.cordoba2);
+    var k=fam+'|'+color+'|'+talle;
+    stockMap[k]=(stockMap[k]||0)+qty;
+    total+=qty;
+  });
+  console.log('Stock Macata '+sourceLabel+': '+Object.keys(stockMap).length+' combinaciones / '+rawRows.length+' filas crudas. Omitidas: encabezado='+omitHeader+', sin articulo='+omitNoArt+', fuera Macata='+omitNoFam+'. Total='+Math.round(total));
+  renderStockReal(stockMap);
+  var kpi=document.getElementById('kpi-stock-fisico');
+  if(kpi)kpi.textContent=Math.round(total).toLocaleString('es-AR');
+  PROY=[];Object.keys(stockMap).forEach(function(k){var p=k.split('|');PROY.push({familia:p[0],color:p[1],talle:p[2],real:stockMap[k]});});
+  renderProyectado('proy-list');
+  window._kpiProyBase=Math.round(total+(window._enCamino||0));
+  var kpiProy=document.getElementById('kpi-proy');
+  if(kpiProy)kpiProy.textContent=Math.round(window._kpiProyBase-(window._trelloProyTotal||0)).toLocaleString('es-AR');
+  var hdr=document.querySelector('header span');
+  if(hdr)hdr.textContent='Stock al: '+new Date().toLocaleString('es-AR');
+  loadTrelloProyMap();
+  loadVentasDemand();
+}
+
+function loadStockFromSheets(){
+  var container=document.getElementById('stock-list');
+  container.innerHTML='<p style="padding:16px;color:#94a3b8">Cargando stock desde Google Sheets...</p>';
+
+  function failMsg(e){container.innerHTML='<p style="padding:16px;color:#dc2626">Error: '+esc(e.message)+'</p>';}
+
+  // Misma solucion del tablero de compras: leer desde B:I porque A/Grupo esta vacia o incompleta y gviz puede cortar filas.
+  var url='https://docs.google.com/spreadsheets/d/'+SHEETS_ID_STOCK+'/gviz/tq?gid='+SHEETS_GID_STOCK+'&range=B1:I10000&headers=0';
+  gvizStock(url,function(data){
+    try{
+      var raw=gvizRowsToRaw(data);
+      // Si por algun motivo gviz completo devuelve pocas filas, usar bloques como respaldo.
+      if(raw.length>=2900){applyStockRowsMacata(raw,'gviz B1:I10000');return;}
+      loadStockByBlocks(raw,applyStockRowsMacata,failMsg);
+    }catch(e){loadStockByBlocks([],applyStockRowsMacata,failMsg);}
+  },function(){loadStockByBlocks([],applyStockRowsMacata,failMsg);});
+}
+
+function loadStockByBlocks(initialRows,done,fail){
+  var all=[];
+  var page=1000,start=1;
+  function next(){
+    var end=start+page-1;
+    var url='https://docs.google.com/spreadsheets/d/'+SHEETS_ID_STOCK+'/gviz/tq?gid='+SHEETS_GID_STOCK+'&range=B'+start+':I'+end+'&headers=0';
+    gvizStock(url,function(data){
+      try{
+        var rows=gvizRowsToRaw(data);
+        all=all.concat(rows);
+        if(rows.length<page||start>=20000){done(all,'gviz bloques B:I');return;}
+        start+=page;next();
+      }catch(e){fail(e);}
+    },fail);
+  }
+  next();
+}
+
+function applyStockGviz(data){
+  // Se mantiene el nombre por compatibilidad, pero ahora usa el parser robusto nuevo.
+  applyStockRowsMacata(gvizRowsToRaw(data),'gviz compatibilidad B:I');
+}
+
+// ── Demanda (ventas) desde Sheets, proveedor MACATA, para Stock Proyectado ────
+function parseGvizDateStr(v){
+  if(!v)return null;
+  var m=/^Date\((\d+),(\d+),(\d+)/.exec(String(v));
+  if(!m)return null;
+  return new Date(+m[1],+m[2],+m[3]);
+}
+
+function gvizVentasRowsToRaw(data){
+  if(data.status==='error')throw new Error('Sheets: '+(data.errors||[]).map(function(e){return e.message;}).join(', '));
+  var rows=(data.table&&data.table.rows)||[];
+  var raw=[];
+  rows.forEach(function(row){
+    var c=row&&row.c?row.c:[];
+    function cell(i){return c[i]&&c[i].v!==undefined?c[i].v:'';}
+    // Rango C:K => 0 Fecha, 1 Vendedor, 2 Lista, 3 Proveedor, 4 ArtDesc, 5 ArtCodigo, 6 ColorCodigo, 7 Talle, 8 Cantidad
+    var fecha=parseGvizDateStr(cell(0));
+    if(!fecha)return; // descarta encabezado y filas sin fecha valida
+    raw.push({fecha:fecha,proveedor:cell(3),codigo:cell(5),colorCod:cell(6),talle:cell(7),cantidad:cell(8)});
+  });
+  return raw;
+}
+
+function loadVentasByBlocks(done,fail){
+  var all=[];
+  var page=1500,start=1,maxStart=15000;
+  function next(){
+    var end=start+page-1;
+    var url='https://docs.google.com/spreadsheets/d/'+SHEETS_ID_VENTAS+'/gviz/tq?gid='+SHEETS_GID_VENTAS+'&range=C'+start+':K'+end+'&headers=0';
+    gvizStock(url,function(data){
+      try{
+        var rows=gvizVentasRowsToRaw(data);
+        all=all.concat(rows);
+        if(rows.length<page*0.5||start>=maxStart){done(all);return;}
+        start+=page;next();
+      }catch(e){fail(e);}
+    },fail);
+  }
+  next();
+}
+
+var VENTAS_LOOKBACK=90;
+function buildVentasDemandMap(rows,lookbackDias){
+  // La demanda de un SKU puntual (familia+color+talle) es muy chica y ruidosa si se mide
+  // solo con los ultimos 7/15/30 dias corridos (muchas semanas caen en 0). Por eso se calcula
+  // el promedio de venta diario sobre una base historica mas amplia (30/60/90/120 dias, elegible
+  // por el usuario) y se proyecta ese promedio hacia adelante para 7/15/30 dias.
+  var today=new Date();today.setHours(0,0,0,0);
+  var qtyMap={};
+  rows.forEach(function(r){
+    var prov=String(r.proveedor||'').toUpperCase();
+    if(prov.indexOf('MACATA')===-1)return;
+    var codigo=String(r.codigo||'').trim().toUpperCase();
+    var fam=TRELLO_CODE_FAM[codigo];if(!fam)return;
+    var fecha=new Date(r.fecha.getTime());fecha.setHours(0,0,0,0);
+    var diffDias=Math.round((today-fecha)/864e5);
+    if(diffDias<0||diffDias>lookbackDias)return;
+    var colorRaw=String(r.colorCod||'').trim();
+    var colorNom=(window._colorCodeToName||{})[colorRaw.toUpperCase()]||colorRaw;
+    var talle=String(r.talle!=null?r.talle:'').trim();
+    var qty=parseStockNum(r.cantidad);
+    var k=fam+'|'+normColor(colorNom)+'|'+talle;
+    qtyMap[k]=(qtyMap[k]||0)+qty;
+  });
+  var map={};
+  Object.keys(qtyMap).forEach(function(k){
+    var avgDia=qtyMap[k]/lookbackDias;
+    map[k]={d7:avgDia*7,d15:avgDia*15,d30:avgDia*30};
+  });
+  return map;
+}
+
+function loadVentasDemand(){
+  loadVentasByBlocks(function(rows){
+    window._ventasRawRows=rows;
+    window._ventasDemandMap=buildVentasDemandMap(rows,VENTAS_LOOKBACK);
+    renderProyectado('proy-list');
+  },function(e){console.warn('Demanda (ventas):',e.message);});
+}
+
+function setVentasLookback(n,btn){
+  VENTAS_LOOKBACK=n;
+  document.querySelectorAll('.proy-lookback-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  if(window._ventasRawRows){
+    window._ventasDemandMap=buildVentasDemandMap(window._ventasRawRows,VENTAS_LOOKBACK);
+    renderProyectado('proy-list');
+  }
+}
+
+function renderStockReal(stockMap){
+  var html='';
+  FAM_DESC_MAP.forEach(function(entry,idx){
+    var fam=entry.fam;var famTotal=0,colorSet={},talleSet={},lookup={};
+    Object.keys(stockMap).forEach(function(k){var parts=k.split('|');if(parts[0]!==fam)return;var color=parts[1],talle=parts[2],qty=stockMap[k];colorSet[color]=1;talleSet[talle]=1;lookup[color+'|'+talle]=(lookup[color+'|'+talle]||0)+qty;famTotal+=qty;});
+    var gkey='sreal_'+idx;
+    html+='<div class="fam-block"><div class="fam-hdr" onclick="toggleFam(\''+gkey+'\')"><span class="fam-title">'+esc(fam)+'</span><span class="fam-total">'+fmt(Math.round(famTotal))+' uds</span><span class="fam-arr" id="farr-'+gkey+'">&#9660;</span></div><div class="fam-body" id="fbody-'+gkey+'">';
+    var colors=Object.keys(colorSet).sort();
+    var talles=Object.keys(talleSet).sort(function(a,b){return talleSortKey(a)<talleSortKey(b)?-1:talleSortKey(a)>talleSortKey(b)?1:0;});
+    if(!colors.length){html+='<p style="padding:10px;color:#94a3b8;font-size:.82rem">Sin datos.</p>';}
+    else{
+      var tbl='<table class="matrix-table"><thead><tr><th class="col-color">Color</th>';
+      talles.forEach(function(t){tbl+='<th>'+esc(t)+'</th>';});tbl+='<th class="total-col">Total</th></tr></thead><tbody>';
+      var colTotals={},grandTotal=0;talles.forEach(function(t){colTotals[t]=0;});
+      colors.forEach(function(color){var rowTotal=0;var cells=talles.map(function(t){var v=lookup[color+'|'+t]||0;colTotals[t]+=v;rowTotal+=v;return v;});grandTotal+=rowTotal;tbl+='<tr><td class="color-cell">'+esc(color)+'</td>';cells.forEach(function(v){var cls=v>0?'ok':v<0?'neg':'zero';tbl+='<td class="'+cls+'">'+(v!==0?fmt(Math.round(v)):'&mdash;')+'</td>';});tbl+='<td class="total-col '+(rowTotal>0?'ok':rowTotal<0?'neg':'zero')+'"><strong>'+fmt(Math.round(rowTotal))+'</strong></td></tr>';});
+      tbl+='<tr class="total-row"><td><strong>TOTAL</strong></td>';talles.forEach(function(t){var v=colTotals[t]||0;tbl+='<td><strong>'+(v!==0?fmt(Math.round(v)):'&mdash;')+'</strong></td>';});tbl+='<td class="total-col"><strong>'+fmt(Math.round(grandTotal))+'</strong></td></tr></tbody></table>';
+      html+=tbl;
+    }
+    html+='</div></div>';
+  });
+  document.getElementById('stock-list').innerHTML=html||'<p style="padding:16px;color:#94a3b8">Sin datos.</p>';
+}
+
+function showTab(name,btn){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active');});document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});document.getElementById('tab-'+name).classList.add('active');btn.classList.add('active');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(n){return n==null?'&mdash;':Number(n).toLocaleString('es-AR');}
+function badge(estado){var cls=estado==='pendiente'?'badge-pendiente':estado==='recibido'?'badge-recibido':'badge-parcial';return '<span class="badge '+cls+'">'+esc(estado)+'</span>';}
+function talleSortKey(t){var n=parseFloat(t);return isNaN(n)?t:String(n).padStart(6,'0');}
+
+function renderMatriz(famName,valueField){
+  var items=PROY.filter(function(r){return r.familia===famName;});
+  if(!items.length)return '<p style="padding:10px;color:#94a3b8;font-size:.82rem">Sin datos para esta familia.</p>';
+  function normColor(c){return(c||'').trim().toLowerCase().replace(/(?:^|\s)(\S)/g,function(m,ch){return m[0]===' '?' '+ch.toUpperCase():ch.toUpperCase();});}
+  var colorSet={},talleSet={};items.forEach(function(r){colorSet[normColor(r.color)]=1;talleSet[r.talle]=1;});
+  var colors=Object.keys(colorSet).sort();
+  var talles=Object.keys(talleSet).sort(function(a,b){return talleSortKey(a)<talleSortKey(b)?-1:talleSortKey(a)>talleSortKey(b)?1:0;});
+  var lookup={};items.forEach(function(r){var key=normColor(r.color)+'|'+r.talle;if(!lookup.hasOwnProperty(key))lookup[key]=r[valueField]||0;});
+  var html='<table class="matrix-table"><thead><tr><th class="col-color">Color</th>';
+  talles.forEach(function(t){html+='<th>'+esc(t)+'</th>';});html+='<th class="total-col">Total</th></tr></thead><tbody>';
+  var colTotals={};talles.forEach(function(t){colTotals[t]=0;});var grandTotal=0;
+  colors.forEach(function(color){var rowTotal=0;var cells=talles.map(function(t){var v=lookup[color+'|'+t]||0;colTotals[t]+=v;rowTotal+=v;return v;});grandTotal+=rowTotal;html+='<tr><td class="color-cell">'+esc(color)+'</td>';cells.forEach(function(v){var cls=v>0?'ok':v<0?'neg':'zero';html+='<td class="'+cls+'">'+(v!==0?fmt(v):'&mdash;')+'</td>';});html+='<td class="total-col '+(rowTotal>0?'ok':rowTotal<0?'neg':'zero')+'"><strong>'+fmt(rowTotal)+'</strong></td></tr>';});
+  html+='<tr class="total-row"><td><strong>TOTAL</strong></td>';talles.forEach(function(t){var v=colTotals[t]||0;html+='<td><strong>'+(v!==0?fmt(v):'&mdash;')+'</strong></td>';});html+='<td class="total-col"><strong>'+fmt(grandTotal)+'</strong></td></tr></tbody></table>';
+  return html;
+}
+
+function renderFamilias(containerId,valueField){
+  var html='';
+  ORDEN_FAMILIAS.forEach(function(fam,idx){
+    var items=PROY.filter(function(r){return r.familia===fam;});
+    var total=items.reduce(function(s,r){return s+(r[valueField]||0);},0);
+    var gkey=containerId+'_'+idx;
+    html+='<div class="fam-block"><div class="fam-hdr" onclick="toggleFam(\''+gkey+'\')"><span class="fam-title">'+esc(fam)+'</span><span class="fam-total">'+fmt(total)+' uds</span><span class="fam-arr" id="farr-'+gkey+'">&#9660;</span></div><div class="fam-body" id="fbody-'+gkey+'">'+renderMatriz(fam,valueField)+'</div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="padding:16px;color:#94a3b8">Sin datos.</p>';
+}
+
+function toggleFam(id){var body=document.getElementById('fbody-'+id);var arr=document.getElementById('farr-'+id);body.classList.toggle('closed');if(arr)arr.textContent=body.classList.contains('closed')?'&#9654;':'&#9660;';}
+
+function renderNotas(){
+  var container=document.getElementById('np-list');
+  if(!NOTAS.length){container.innerHTML='<p style="padding:16px;color:#94a3b8">Sin notas de pedido.</p>';return;}
+  var html='';
+  for(var i=0;i<NOTAS.length;i++){
+    var np=NOTAS[i];var items=np.items||[];var totalSol=0,totalRec=0;
+    for(var j=0;j<items.length;j++){totalSol+=(items[j].cantidad_solicitada||0);totalRec+=(items[j].cantidad_recibida||0);}
+    var grpMapNP={},grpOrdNP=[];
+    for(var j=0;j<items.length;j++){var it=items[j];var d=it.descripcion||'&mdash;';if(!grpMapNP[d]){grpMapNP[d]=[];grpOrdNP.push(d);}grpMapNP[d].push(it);}
+    var rowsHtml='';
+    for(var gi=0;gi<grpOrdNP.length;gi++){
+      var desc=grpOrdNP[gi];var gitems=grpMapNP[desc];var gSol=0;
+      for(var k=0;k<gitems.length;k++)gSol+=(gitems[k].cantidad_solicitada||0);
+      var gkey='np'+i+'g'+gi;
+      rowsHtml+='<tr class="grp-item-hdr" onclick="toggleGrp(\''+gkey+'\')"><td colspan="3"><strong>'+esc(desc)+'</strong> <span style="font-weight:400;color:#64748b;font-size:.78rem">&middot; '+gitems.length+' talles &middot; '+gSol+' uds</span> <span class="grp-arr" id="arr-'+gkey+'">&#9660;</span></td><td style="text-align:right;font-weight:700">'+fmt(gSol)+'</td><td></td><td></td></tr>';
+      for(var k=0;k<gitems.length;k++){var it=gitems[k];rowsHtml+='<tr class="grp-row" data-grp="'+gkey+'"><td style="padding-left:20px;color:#94a3b8;font-size:.78rem"></td><td>'+esc(it.color)+'</td><td>'+esc(it.talle)+'</td><td style="text-align:right">'+fmt(it.cantidad_solicitada)+'</td><td style="text-align:right">'+(it.cantidad_recibida!=null?fmt(it.cantidad_recibida):'<span style="color:#cbd5e1">&mdash;</span>')+'</td><td style="text-align:right">'+fmt(it.precio_unitario||0)+'</td></tr>';}
+    }
+    var meta='';if(totalRec)meta+=' &middot; <strong>'+totalRec+'</strong> recibidas';if(items.length)meta+=' &middot; '+items.length+' renglones';
+    var obs=np.observaciones?'<p style="font-size:.8rem;color:#64748b;margin:8px 0">'+esc(np.observaciones)+'</p>':'';
+    html+='<div class="np-card"><div class="np-header" onclick="toggleNP('+i+')"><div><div class="np-title">'+esc(np.id)+'</div><div class="np-meta">'+esc(np.fecha_emision||'')+'</div></div><div>'+badge(np.estado)+'</div><div class="np-meta" style="margin-left:auto"><strong>'+totalSol+'</strong> uds solicitadas'+meta+'</div><div style="font-size:1.2rem;color:#94a3b8" id="arrow-'+i+'">&#9660;</div></div><div class="np-body" id="npbody-'+i+'">'+obs+'<table class="np-table"><thead><tr><th>Descripcion</th><th>Color</th><th>Talle</th><th style="text-align:right">Solicitado</th><th style="text-align:right">Recibido</th><th style="text-align:right">Precio U.</th></tr></thead><tbody>'+rowsHtml+'</tbody></table></div></div>';
+  }
+  container.innerHTML=html;
+}
+
+function toggleNP(i){var body=document.getElementById('npbody-'+i);var arrow=document.getElementById('arrow-'+i);body.classList.toggle('open');arrow.textContent=body.classList.contains('open')?'&#9650;':'&#9660;';}
+function toggleGrp(id){document.querySelectorAll('.grp-row[data-grp="'+id+'"]').forEach(function(r){r.classList.toggle('hidden');});var arr=document.getElementById('arr-'+id);if(arr)arr.textContent=arr.textContent.trim()==='&#9660;'?' &#9650;':' &#9660;';}
+
+// ── Stock Proyectado ──────────────────────────────────────────────────────────
+function normColor(c){return(c||'').trim().toLowerCase().replace(/(?:^|\s)(\S)/g,function(m,ch){return m[0]===' '?' '+ch.toUpperCase():ch.toUpperCase();});}
+
+var NP_DESC_FAM=[
+  {fam:'Cargo Ripstop',        p:['cargo ripstop']},
+  {fam:'Cargo Cazador',        p:['cargo cazador']},
+  {fam:'Bombacha lisa',        p:['bombacha lisa']},
+  {fam:'Cargo elastizado fit', p:['cargo fit','cargo elastizado fit']},
+  {fam:'Pantalon de trabajo',  p:['pantalon de trabajo']},
+  {fam:'Camisa de trabajo',    p:['camisa de trabajo']},
+  {fam:'Bombacha dama',        p:['bombacha dama']}
+];
+function npDescToFam(desc){
+  var d=normCol(desc||'');
+  for(var i=0;i<NP_DESC_FAM.length;i++){var e=NP_DESC_FAM[i];for(var j=0;j<e.p.length;j++){if(d.indexOf(e.p[j])!==-1)return e.fam;}}
+  return null;
+}
+function buildNpProyMap(){
+  var today=new Date();today.setHours(0,0,0,0);
+  var map={};
+  NOTAS.forEach(function(np){
+    if(np.estado!=='pendiente')return;
+    var fe=new Date(np.fecha_emision);fe.setHours(0,0,0,0);
+    var dias=Math.round((today-fe)/864e5);
+    var falt=30-dias;
+    var bucket=falt<=7?'b7':falt<=15?'b15':'b20';
+    (np.items||[]).forEach(function(item){
+      var fam=npDescToFam(item.descripcion);if(!fam)return;
+      var color=normColor((item.color||'').trim());
+      var talle=String(item.talle||'').trim();
+      var k=fam+'|'+color+'|'+talle;
+      if(!map[k])map[k]={b7:0,b15:0,b20:0};
+      map[k][bucket]+=(item.cantidad_solicitada||0);
+    });
+  });
+  return map;
+}
+var PROY_PERIOD=7;
+function setProyPeriod(p,btn){
+  PROY_PERIOD=p;
+  document.querySelectorAll('.proy-period-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderProyectado('proy-list');
+}
+
+var _ttActiveCell=null;
+function toggleProyTTPeriod(cell,e){
+  e.stopPropagation();
+  var tt=document.getElementById('proy-tt');
+  if(_ttActiveCell===cell&&tt.style.display==='block'){tt.style.display='none';_ttActiveCell=null;return;}
+  _ttActiveCell=cell;
+  var real=+(cell.getAttribute('data-real'))||0;
+  var b7=+(cell.getAttribute('data-b7'))||0;
+  var b15=+(cell.getAttribute('data-b15'))||0;
+  var b20=+(cell.getAttribute('data-b20'))||0;
+  var trello=+(cell.getAttribute('data-trello'))||0;
+  var d7=+(cell.getAttribute('data-d7'))||0;
+  var d15=+(cell.getAttribute('data-d15'))||0;
+  var d30=+(cell.getAttribute('data-d30'))||0;
+  var period=PROY_PERIOD;
+  var npCum=b7,npRows='<tr><td>NP proy. 7 d\xEDas</td><td class="tt-val">'+fmt(b7)+'</td></tr>';
+  if(period>=15){npRows+='<tr><td>NP proy. 15 d\xEDas</td><td class="tt-val">'+fmt(b15)+'</td></tr>';npCum+=b15;}
+  if(period>=30){npRows+='<tr><td>NP proy. +20 d\xEDas</td><td class="tt-val">'+fmt(b20)+'</td></tr>';npCum+=b20;}
+  var demVal=period===7?d7:period===15?d15:d30;
+  var demValR=Math.round(demVal*10)/10;
+  var trelloRow=trello?'<tr><td>Pedidos Trello</td><td class="tt-val" style="color:#dc2626">'+fmt(-trello)+'</td></tr>':'';
+  var total=Math.round(real+npCum-trello-demVal);
+  tt.innerHTML='<div class="tt-title">Desglose proyectado &middot; '+period+' d\xEDas</div>'+
+    '<table>'+
+    '<tr><td>Stock real</td><td class="tt-val">'+fmt(real)+'</td></tr>'+
+    '<tr><td colspan="2"><div class="tt-sep"></div></td></tr>'+
+    npRows+
+    trelloRow+
+    '<tr><td>Demanda estimada ('+period+'d)</td><td class="tt-val" style="color:#dc2626">'+fmt(-demValR)+'</td></tr>'+
+    '<tr class="tt-total"><td>Total proyectado</td><td class="tt-val">'+fmt(total)+'</td></tr>'+
+    '</table>';
+  tt.style.display='block';
+  var x=e.clientX+16,y=e.clientY-14;
+  var w=tt.offsetWidth||280,h=tt.offsetHeight||170;
+  if(x+w>window.innerWidth-10)x=e.clientX-w-10;
+  if(y+h>window.innerHeight-10)y=window.innerHeight-h-10;
+  if(y<10)y=10;
+  tt.style.left=x+'px';tt.style.top=y+'px';
+}
+function toggleProyTT(cell,e){
+  e.stopPropagation();
+  var tt=document.getElementById('proy-tt');
+  if(_ttActiveCell===cell&&tt.style.display==='block'){tt.style.display='none';_ttActiveCell=null;return;}
+  _ttActiveCell=cell;
+  var real=+(cell.getAttribute('data-real'))||0;
+  var b7=+(cell.getAttribute('data-b7'))||0;
+  var b15=+(cell.getAttribute('data-b15'))||0;
+  var b20=+(cell.getAttribute('data-b20'))||0;
+  var trello=+(cell.getAttribute('data-trello'))||0;
+  var total=real+b7+b15+b20-trello;
+  var trelloRow=trello?'<tr><td colspan="2"><div class="tt-sep"></div></td></tr><tr><td>Pedidos Trello</td><td class="tt-val" style="color:#dc2626">'+fmt(-trello)+'</td></tr>':'';
+  tt.innerHTML='<div class="tt-title">Desglose proyectado</div>'+
+    '<table>'+
+    '<tr><td>Stock real</td><td class="tt-val">'+fmt(real)+'</td></tr>'+
+    '<tr><td colspan="2"><div class="tt-sep"></div></td></tr>'+
+    '<tr><td>NP proy. 7 d\xEDas</td><td class="tt-val">'+fmt(b7)+'</td></tr>'+
+    '<tr><td>NP proy. 15 d\xEDas</td><td class="tt-val">'+fmt(b15)+'</td></tr>'+
+    '<tr><td>NP proy. +20 d\xEDas</td><td class="tt-val">'+fmt(b20)+'</td></tr>'+
+    trelloRow+
+    '<tr class="tt-total"><td>Total proyectado</td><td class="tt-val">'+fmt(total)+'</td></tr>'+
+    '</table>';
+  tt.style.display='block';
+  var x=e.clientX+16,y=e.clientY-14;
+  var w=tt.offsetWidth||280,h=tt.offsetHeight||170;
+  if(x+w>window.innerWidth-10)x=e.clientX-w-10;
+  if(y+h>window.innerHeight-10)y=window.innerHeight-h-10;
+  if(y<10)y=10;
+  tt.style.left=x+'px';tt.style.top=y+'px';
+}
+document.addEventListener('click',function(){var tt=document.getElementById('proy-tt');if(tt)tt.style.display='none';_ttActiveCell=null;});
+
+function loadTrelloProyMap(){
+  var key='944a71628ede0c2574331cd84636a178';
+  var tok='ATTAfbaac5a9d64f55d0d257822592589de5444aab8e7e0e074826fc2d3ecf5331f5BFB4BD6F';
+  var board='3sWRgjJ3';
+  function tApi(ep){var sep=ep.indexOf('?')!==-1?'&':'?';return fetch('https://api.trello.com/1'+ep+sep+'key='+key+'&token='+tok).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();});}
+  Promise.all([
+    tApi('/boards/'+board+'/lists?'),
+    tApi('/boards/'+board+'/customFields?'),
+    tApi('/boards/'+board+'/cards?customFieldItems=true&fields=name,idList&')
+  ]).then(function(res){
+    var lists=res[0],fDefs=res[1],cards=res[2];
+    var defMap={};(fDefs||[]).forEach(function(f){defMap[f.id]=f.name;});
+    var pedidoIds={};
+    (lists||[]).forEach(function(l){if((l.name||'').toLowerCase().indexOf('pedido')!==-1)pedidoIds[l.id]=1;});
+    var tMap={};
+    (cards||[]).forEach(function(card){
+      if(!pedidoIds[card.idList])return;
+      var fMap={};
+      (card.customFieldItems||[]).forEach(function(item){
+        var name=defMap[item.idCustomField]||'';if(!name)return;
+        var val='';
+        if(item.value){if(item.value.text!==undefined)val=item.value.text;else if(item.value.number!==undefined)val=String(item.value.number);}
+        else if(item.idValue){var fd=(fDefs||[]).find(function(f){return f.id===item.idCustomField;});if(fd&&fd.options){var op=fd.options.find(function(o){return o.id===item.idValue;});if(op&&op.value&&op.value.text)val=op.value.text;}}
+        if(val!=='')fMap[name]=val;
+      });
+      for(var i=1;i<=10;i++){
+        var skuVal='',qtyVal='',statusVal='';
+        Object.keys(fMap).forEach(function(n){var nl=n.toLowerCase();if(nl==='falta sku '+i||nl==='falta sku'+i)skuVal=fMap[n];if(nl==='cantidad sku '+i||nl==='cantidad sku'+i)qtyVal=fMap[n];if(nl==='status sku '+i||nl==='status sku'+i)statusVal=fMap[n];});
+        if(!skuVal)continue;
+        if(statusVal.toLowerCase()!=='pedido')continue;
+        var parts=skuVal.trim().split('-');if(parts.length<3)continue;
+        var talle=parts[parts.length-1];var colorRaw=parts[parts.length-2];
+        var codigo=parts.slice(0,parts.length-2).join('-').toUpperCase();
+        var fam=TRELLO_CODE_FAM[codigo];if(!fam)continue;
+        var qty=parseFloat(qtyVal)||1;
+        var colorNom=(window._colorCodeToName||{})[colorRaw.toUpperCase()]||colorRaw;
+        var k=fam+'|'+normColor(colorNom)+'|'+talle;
+        tMap[k]=(tMap[k]||0)+qty;
+      }
+    });
+    window._trelloProyTotal=Object.keys(tMap).reduce(function(s,k){return s+tMap[k];},0);
+    window._trelloProyMap=tMap;
+    renderProyectado('proy-list');
+    var kp=document.getElementById('kpi-proy');
+    if(kp&&window._kpiProyBase!==undefined)kp.textContent=Math.round(window._kpiProyBase-window._trelloProyTotal).toLocaleString('es-AR');
+  }).catch(function(e){console.warn('Trello proy:',e.message);});
+}
+
+function proyCovClass(total,dem){
+  // Clasifica el stock proyectado segun cuanto cubre la demanda proyectada:
+  // verde = cubre la demanda, amarillo = cubre al menos 70% (hasta 30% de faltante), rojo = falta mas de 30%.
+  if(dem>0){
+    var ratio=total/dem;
+    if(ratio>=1)return'cov-ok';
+    if(ratio>=0.7)return'cov-warn';
+    return'cov-bad';
+  }
+  return total>0?'cov-ok':total<0?'cov-bad':'zero';
+}
+function renderProyectado(containerId){
+  var npMap=buildNpProyMap();
+  var trelloMap=window._trelloProyMap||{};
+  var demandMap=window._ventasDemandMap||{};
+  var period=PROY_PERIOD;
+  var proyLookup={};
+  PROY.forEach(function(r){var k=r.familia+'|'+normColor(r.color)+'|'+r.talle;proyLookup[k]=(proyLookup[k]||0)+(r.real||0);});
+  var html='';
+  ORDEN_FAMILIAS.forEach(function(fam,idx){
+    var colorSet={},talleSet={};
+    PROY.filter(function(r){return r.familia===fam;}).forEach(function(r){colorSet[normColor(r.color)]=1;talleSet[r.talle]=1;});
+    Object.keys(npMap).forEach(function(k){var p=k.split('|');if(p[0]===fam){colorSet[p[1]]=1;talleSet[p[2]]=1;}});
+    var colors=Object.keys(colorSet).sort();
+    var talles=Object.keys(talleSet).sort(function(a,b){return talleSortKey(a)<talleSortKey(b)?-1:talleSortKey(a)>talleSortKey(b)?1:0;});
+    var famTotal=0,famDem=0;
+    var gkey=containerId+'_'+idx;
+    var tblBody='';
+    if(colors.length){
+      var colTotals={},colDemTotals={};talles.forEach(function(t){colTotals[t]=0;colDemTotals[t]=0;});
+      colors.forEach(function(color){
+        var rowTotal=0,rowDem=0;
+        var cells=talles.map(function(t){
+          var k=fam+'|'+color+'|'+t;
+          var real=proyLookup[k]||0;
+          var np=npMap[k]||{b7:0,b15:0,b20:0};
+          var trello=trelloMap[k]||0;
+          var dem=demandMap[k]||{d7:0,d15:0,d30:0};
+          var npCum=period>=30?(np.b7+np.b15+np.b20):period>=15?(np.b7+np.b15):np.b7;
+          var demVal=period>=30?dem.d30:period>=15?dem.d15:dem.d7;
+          var total=real+npCum-trello-demVal;
+          colTotals[t]+=total;rowTotal+=total;
+          colDemTotals[t]+=demVal;rowDem+=demVal;
+          return{total:total,real:real,b7:np.b7,b15:np.b15,b20:np.b20,trello:trello,d7:dem.d7,d15:dem.d15,d30:dem.d30,demVal:demVal};
+        });
+        famTotal+=rowTotal;famDem+=rowDem;
+        tblBody+='<tr><td class="color-cell">'+esc(color)+'</td>';
+        cells.forEach(function(c){
+          var v=c.total;var cls=proyCovClass(v,c.demVal);
+          tblBody+='<td class="'+cls+'" data-real="'+c.real+'" data-b7="'+c.b7+'" data-b15="'+c.b15+'" data-b20="'+c.b20+'" data-trello="'+c.trello+'" data-d7="'+c.d7+'" data-d15="'+c.d15+'" data-d30="'+c.d30+'"'+
+               ' onclick="toggleProyTTPeriod(this,event)" style="cursor:pointer">'+
+               (v!==0?fmt(Math.round(v)):'&mdash;')+'</td>';
+        });
+        tblBody+='<td class="total-col '+proyCovClass(rowTotal,rowDem)+'"><strong>'+fmt(Math.round(rowTotal))+'</strong></td></tr>';
+      });
+      var footer='<tr class="total-row"><td><strong>TOTAL</strong></td>';
+      talles.forEach(function(t){var v=colTotals[t]||0;footer+='<td class="'+proyCovClass(v,colDemTotals[t]||0)+'"><strong>'+(v!==0?fmt(Math.round(v)):'&mdash;')+'</strong></td>';});
+      footer+='<td class="total-col '+proyCovClass(famTotal,famDem)+'"><strong>'+fmt(Math.round(famTotal))+'</strong></td></tr>';
+      var tbl='<table class="matrix-table"><thead><tr><th class="col-color">Color</th>';
+      talles.forEach(function(t){tbl+='<th>'+esc(t)+'</th>';});
+      tbl+='<th class="total-col">Total</th></tr></thead><tbody>'+tblBody+footer+'</tbody></table>';
+      html+='<div class="fam-block"><div class="fam-hdr" onclick="toggleFam(\''+gkey+'\')"><span class="fam-title">'+esc(fam)+'</span><span class="fam-total">'+fmt(Math.round(famTotal))+' uds</span><span class="fam-arr" id="farr-'+gkey+'">&#9660;</span></div><div class="fam-body" id="fbody-'+gkey+'">'+tbl+'</div></div>';
+    }else{
+      html+='<div class="fam-block"><div class="fam-hdr" onclick="toggleFam(\''+gkey+'\')"><span class="fam-title">'+esc(fam)+'</span><span class="fam-total">0 uds</span><span class="fam-arr" id="farr-'+gkey+'">&#9660;</span></div><div class="fam-body" id="fbody-'+gkey+'"><p style="padding:10px;color:#94a3b8;font-size:.82rem">Sin datos.</p></div></div>';
+    }
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="padding:16px;color:#94a3b8">Sin datos.</p>';
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderPedido(containerId){
+  var npMap=buildNpProyMap();
+  // Collect all fam|color|talle keys present in npMap
+  var famColorTalle={};
+  Object.keys(npMap).forEach(function(k){
+    var p=k.split('|');var fam=p[0];
+    if(!famColorTalle[fam])famColorTalle[fam]={colorSet:{},talleSet:{}};
+    famColorTalle[fam].colorSet[p[1]]=1;
+    famColorTalle[fam].talleSet[p[2]]=1;
+  });
+  var html='';
+  ORDEN_FAMILIAS.forEach(function(fam,idx){
+    var gkey=containerId+'_'+idx;
+    var data=famColorTalle[fam];
+    if(!data||!Object.keys(data.colorSet).length){
+      html+='<div class="fam-block"><div class="fam-hdr" onclick="toggleFam(\''+gkey+'\')"><span class="fam-title">'+esc(fam)+'</span><span class="fam-total">0 uds</span><span class="fam-arr" id="farr-'+gkey+'">&#9660;</span></div><div class="fam-body" id="fbody-'+gkey+'"><p style="padding:10px;color:#94a3b8;font-size:.82rem">Sin NPs pendientes.</p></div></div>';
+      return;
+    }
+    var colors=Object.keys(data.colorSet).sort();
+    var talles=Object.keys(data.talleSet).sort(function(a,b){return talleSortKey(a)<talleSortKey(b)?-1:talleSortKey(a)>talleSortKey(b)?1:0;});
+    var colTotals={};talles.forEach(function(t){colTotals[t]=0;});
+    var famTotal=0,tblBody='';
+    colors.forEach(function(color){
+      var rowTotal=0;
+      var cells=talles.map(function(t){
+        var k=fam+'|'+color+'|'+t;
+        var np=npMap[k]||{b7:0,b15:0,b20:0};
+        var v=np.b7+np.b15+np.b20;
+        colTotals[t]+=v;rowTotal+=v;return{total:v,b7:np.b7,b15:np.b15,b20:np.b20};
+      });
+      famTotal+=rowTotal;
+      tblBody+='<tr><td class="color-cell">'+esc(color)+'</td>';
+      cells.forEach(function(c){var cls=c.total>0?'ok':'zero';tblBody+='<td class="'+cls+'" data-real="0" data-b7="'+c.b7+'" data-b15="'+c.b15+'" data-b20="'+c.b20+'" onclick="toggleProyTT(this,event)" style="cursor:pointer">'+(c.total>0?fmt(c.total):'&mdash;')+'</td>';});
+      tblBody+='<td class="total-col '+(rowTotal>0?'ok':'zero')+'"><strong>'+(rowTotal>0?fmt(rowTotal):'&mdash;')+'</strong></td></tr>';
+    });
+    var footer='<tr class="total-row"><td><strong>TOTAL</strong></td>';
+    talles.forEach(function(t){var v=colTotals[t]||0;footer+='<td><strong>'+(v?fmt(v):'&mdash;')+'</strong></td>';});
+    footer+='<td class="total-col"><strong>'+fmt(famTotal)+'</strong></td></tr>';
+    var tbl='<table class="matrix-table"><thead><tr><th class="col-color">Color</th>';
+    talles.forEach(function(t){tbl+='<th>'+esc(t)+'</th>';});
+    tbl+='<th class="total-col">Total</th></tr></thead><tbody>'+tblBody+footer+'</tbody></table>';
+    html+='<div class="fam-block"><div class="fam-hdr" onclick="toggleFam(\''+gkey+'\')"><span class="fam-title">'+esc(fam)+'</span><span class="fam-total">'+fmt(famTotal)+' uds</span><span class="fam-arr" id="farr-'+gkey+'">&#9660;</span></div><div class="fam-body" id="fbody-'+gkey+'">'+tbl+'</div></div>';
+  });
+  document.getElementById(containerId).innerHTML=html||'<p style="padding:16px;color:#94a3b8">Sin datos.</p>';
+}
+
+renderNotas();
+loadStockFromSheets();
+renderProyectado('proy-list');
+renderPedido('pedido-list');
+</script>
+<div id="proy-tt" onclick="event.stopPropagation()"></div>
 </body>
 </html>

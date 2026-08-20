@@ -44,4 +44,11 @@ $sw = New-Object System.IO.StreamWriter($TABLERO, $false, [System.Text.Encoding]
 $sw.Write($contenido)
 $sw.Close()
 
-Write-Host "tablero.html actualizado: $($notasArr.Count) notas, $totalUds uds en camino"
+# index.html es la portada del repo (GitHub Pages) y debe reflejar el mismo contenido real,
+# no un redirect.
+$INDEX = "$BASE\index.html"
+$sw2 = New-Object System.IO.StreamWriter($INDEX, $false, [System.Text.Encoding]::UTF8)
+$sw2.Write($contenido)
+$sw2.Close()
+
+Write-Host "tablero-macata-stock-fixed-v2.html e index.html actualizados: $($notasArr.Count) notas, $totalUds uds en camino"
