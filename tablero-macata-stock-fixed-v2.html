@@ -63,6 +63,15 @@
   .ok   { color: #16a34a; }
   .zero { color: #cbd5e1; }
   .neg  { color: #dc2626; font-weight: 600; }
+  .cov-ok   { background: #dcfce7; color: #15803d; font-weight: 600; }
+  .cov-warn { background: #fef3c7; color: #b45309; font-weight: 600; }
+  .cov-bad  { background: #fee2e2; color: #dc2626; font-weight: 600; }
+  table.matrix-table td.cov-ok.total-col   { background: #bbf0d1; }
+  table.matrix-table td.cov-warn.total-col { background: #fde59c; }
+  table.matrix-table td.cov-bad.total-col  { background: #fdc9c9; }
+  table.matrix-table tr.total-row td.cov-ok   { background: #bbf0d1; }
+  table.matrix-table tr.total-row td.cov-warn { background: #fde59c; }
+  table.matrix-table tr.total-row td.cov-bad  { background: #fdc9c9; }
   #proy-tt { display:none; position:fixed; z-index:9999; background:#1e293b; color:#f1f5f9;
              border-radius:12px; padding:18px 24px; font-size:.92rem; line-height:1.8;
              box-shadow:0 8px 32px rgba(0,0,0,.45); min-width:270px; cursor:default; }
@@ -615,6 +624,17 @@ function loadTrelloProyMap(){
   }).catch(function(e){console.warn('Trello proy:',e.message);});
 }
 
+function proyCovClass(total,dem){
+  // Clasifica el stock proyectado segun cuanto cubre la demanda proyectada:
+  // verde = cubre la demanda, amarillo = cubre al menos 70% (hasta 30% de faltante), rojo = falta mas de 30%.
+  if(dem>0){
+    var ratio=total/dem;
+    if(ratio>=1)return'cov-ok';
+    if(ratio>=0.7)return'cov-warn';
+    return'cov-bad';
+  }
+  return total>0?'cov-ok':total<0?'cov-bad':'zero';
+}
 function renderProyectado(containerId){
   var npMap=buildNpProyMap();
   var trelloMap=window._trelloProyMap||{};
@@ -629,13 +649,13 @@ function renderProyectado(containerId){
     Object.keys(npMap).forEach(function(k){var p=k.split('|');if(p[0]===fam){colorSet[p[1]]=1;talleSet[p[2]]=1;}});
     var colors=Object.keys(colorSet).sort();
     var talles=Object.keys(talleSet).sort(function(a,b){return talleSortKey(a)<talleSortKey(b)?-1:talleSortKey(a)>talleSortKey(b)?1:0;});
-    var famTotal=0;
+    var famTotal=0,famDem=0;
     var gkey=containerId+'_'+idx;
     var tblBody='';
     if(colors.length){
-      var colTotals={};talles.forEach(function(t){colTotals[t]=0;});
+      var colTotals={},colDemTotals={};talles.forEach(function(t){colTotals[t]=0;colDemTotals[t]=0;});
       colors.forEach(function(color){
-        var rowTotal=0;
+        var rowTotal=0,rowDem=0;
         var cells=talles.map(function(t){
           var k=fam+'|'+color+'|'+t;
           var real=proyLookup[k]||0;
@@ -646,21 +666,22 @@ function renderProyectado(containerId){
           var demVal=period>=30?dem.d30:period>=15?dem.d15:dem.d7;
           var total=real+npCum-trello-demVal;
           colTotals[t]+=total;rowTotal+=total;
-          return{total:total,real:real,b7:np.b7,b15:np.b15,b20:np.b20,trello:trello,d7:dem.d7,d15:dem.d15,d30:dem.d30};
+          colDemTotals[t]+=demVal;rowDem+=demVal;
+          return{total:total,real:real,b7:np.b7,b15:np.b15,b20:np.b20,trello:trello,d7:dem.d7,d15:dem.d15,d30:dem.d30,demVal:demVal};
         });
-        famTotal+=rowTotal;
+        famTotal+=rowTotal;famDem+=rowDem;
         tblBody+='<tr><td class="color-cell">'+esc(color)+'</td>';
         cells.forEach(function(c){
-          var v=c.total;var cls=v>0?'ok':v<0?'neg':'zero';
+          var v=c.total;var cls=proyCovClass(v,c.demVal);
           tblBody+='<td class="'+cls+'" data-real="'+c.real+'" data-b7="'+c.b7+'" data-b15="'+c.b15+'" data-b20="'+c.b20+'" data-trello="'+c.trello+'" data-d7="'+c.d7+'" data-d15="'+c.d15+'" data-d30="'+c.d30+'"'+
                ' onclick="toggleProyTTPeriod(this,event)" style="cursor:pointer">'+
                (v!==0?fmt(Math.round(v)):'&mdash;')+'</td>';
         });
-        tblBody+='<td class="total-col '+(rowTotal>0?'ok':rowTotal<0?'neg':'zero')+'"><strong>'+fmt(Math.round(rowTotal))+'</strong></td></tr>';
+        tblBody+='<td class="total-col '+proyCovClass(rowTotal,rowDem)+'"><strong>'+fmt(Math.round(rowTotal))+'</strong></td></tr>';
       });
       var footer='<tr class="total-row"><td><strong>TOTAL</strong></td>';
-      talles.forEach(function(t){var v=colTotals[t]||0;footer+='<td><strong>'+(v!==0?fmt(Math.round(v)):'&mdash;')+'</strong></td>';});
-      footer+='<td class="total-col"><strong>'+fmt(Math.round(famTotal))+'</strong></td></tr>';
+      talles.forEach(function(t){var v=colTotals[t]||0;footer+='<td class="'+proyCovClass(v,colDemTotals[t]||0)+'"><strong>'+(v!==0?fmt(Math.round(v)):'&mdash;')+'</strong></td>';});
+      footer+='<td class="total-col '+proyCovClass(famTotal,famDem)+'"><strong>'+fmt(Math.round(famTotal))+'</strong></td></tr>';
       var tbl='<table class="matrix-table"><thead><tr><th class="col-color">Color</th>';
       talles.forEach(function(t){tbl+='<th>'+esc(t)+'</th>';});
       tbl+='<th class="total-col">Total</th></tr></thead><tbody>'+tblBody+footer+'</tbody></table>';
