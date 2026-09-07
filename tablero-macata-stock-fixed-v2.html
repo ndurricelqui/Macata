@@ -531,6 +531,19 @@ function toggleProyTTPeriod(cell,e){
   var demValR=Math.round(demVal*10)/10;
   var trelloRow=trello?'<tr><td>Pedidos Trello</td><td class="tt-val" style="color:#dc2626">'+fmt(-trello)+'</td></tr>':'';
   var total=Math.round(real+npCum-trello-demVal);
+  // Sugerencia de compra: cubrir la demanda estimada durante el lead time de reposicion
+  // (~30 dias / 1 mes, independiente del periodo de vista elegido) mas un stock de
+  // seguridad del 25% de esa demanda, neto de lo que ya esta disponible o en camino
+  // (stock real + NPs pendientes) y de lo ya comprometido (pedidos Trello).
+  var demandaLT=d30;
+  var stockSeguridad=demandaLT*0.25;
+  var necesarioLT=demandaLT+stockSeguridad;
+  var disponibleLT=real+b7+b15+b20-trello;
+  var sugCompra=Math.max(0,Math.round(necesarioLT-disponibleLT));
+  var compraRow='<tr><td colspan="2"><div class="tt-sep"></div></td></tr>'+
+    '<tr><td>Demanda mensual estimada</td><td class="tt-val">'+fmt(Math.round(demandaLT))+'</td></tr>'+
+    '<tr><td>Stock seguridad (25%)</td><td class="tt-val">'+fmt(Math.round(stockSeguridad))+'</td></tr>'+
+    '<tr class="tt-total" style="color:#38bdf8"><td>Sugerencia de compra</td><td class="tt-val">'+fmt(sugCompra)+'</td></tr>';
   tt.innerHTML='<div class="tt-title">Desglose proyectado &middot; '+period+' d\xEDas</div>'+
     '<table>'+
     '<tr><td>Stock real</td><td class="tt-val">'+fmt(real)+'</td></tr>'+
@@ -539,6 +552,7 @@ function toggleProyTTPeriod(cell,e){
     trelloRow+
     '<tr><td>Demanda estimada ('+period+'d)</td><td class="tt-val" style="color:#dc2626">'+fmt(-demValR)+'</td></tr>'+
     '<tr class="tt-total"><td>Total proyectado</td><td class="tt-val">'+fmt(total)+'</td></tr>'+
+    compraRow+
     '</table>';
   tt.style.display='block';
   var x=e.clientX+16,y=e.clientY-14;
