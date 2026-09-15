@@ -1,0 +1,54 @@
+{
+  "id": "Pedido #43172 - 15.09.26",
+  "numero_pedido": "43172",
+  "fecha_emision": "2026-09-15",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    {
+      "codigo": null,
+      "descripcion": "Campera Softshell Reflex",
+      "color": "NEGRO",
+      "talle": "S",
+      "cantidad_solicitada": 1
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Softshell Reflex",
+      "color": "NEGRO",
+      "talle": "M",
+      "cantidad_solicitada": 7
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Softshell Reflex",
+      "color": "NEGRO",
+      "talle": "L",
+      "cantidad_solicitada": 9
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Softshell Reflex",
+      "color": "NEGRO",
+      "talle": "XL",
+      "cantidad_solicitada": 4
+    },
+    {
+      "codigo": null,
+      "descripcion": "Campera Softshell Reflex",
+      "color": "NEGRO",
+      "talle": "XXL",
+      "cantidad_solicitada": 3
+    }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 24
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009, CORDOBA",
+  "creado_en": "2026-09-15T00:00:00"
+}
