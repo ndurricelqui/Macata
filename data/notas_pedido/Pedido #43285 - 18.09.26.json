@@ -1,0 +1,37 @@
+{
+  "id": "Pedido #43285 - 18.09.26",
+  "numero_pedido": "43285",
+  "fecha_emision": "2026-09-18",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "38", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "40", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "42", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "44", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "46", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "48", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "50", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "52", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "BEIGE", "talle": "54", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "38", "cantidad_solicitada": 1 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "40", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "42", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "44", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "46", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "48", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "50", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "52", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Cargo Terrano", "color": "VERDE", "talle": "54", "cantidad_solicitada": 1 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 38
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)",
+  "creado_en": "2026-09-18T00:00:00"
+}
