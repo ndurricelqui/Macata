@@ -63,6 +63,14 @@
       "fecha_entrega_esperada": null,
       "total": 38,
       "estado": "pendiente"
+    },
+    {
+      "id": "Pedido #43420 - 22.09.26",
+      "proveedor": null,
+      "fecha_emision": "2026-09-22",
+      "fecha_entrega_esperada": null,
+      "total": 30,
+      "estado": "pendiente"
     }
   ]
 }
