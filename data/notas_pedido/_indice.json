@@ -17,51 +17,11 @@
       "estado": "pendiente"
     },
     {
-      "id": "Pedido #43761 - 03.10.26",
-      "proveedor": null,
-      "fecha_emision": "2026-10-03",
-      "fecha_entrega_esperada": null,
-      "total": 40,
-      "estado": "pendiente"
-    },
-    {
       "id": "Pedido #43947 - 08.10.26",
       "proveedor": null,
       "fecha_emision": "2026-10-08",
       "fecha_entrega_esperada": null,
       "total": 15,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #43976 - 09.10.26",
-      "proveedor": null,
-      "fecha_emision": "2026-10-09",
-      "fecha_entrega_esperada": null,
-      "total": 150,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #44050 - 14.10.26",
-      "proveedor": null,
-      "fecha_emision": "2026-10-14",
-      "fecha_entrega_esperada": null,
-      "total": 30,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #44178 - 16.10.26",
-      "proveedor": null,
-      "fecha_emision": "2026-10-16",
-      "fecha_entrega_esperada": null,
-      "total": 35,
-      "estado": "pendiente"
-    },
-    {
-      "id": "Pedido #44180 - 16.10.26",
-      "proveedor": null,
-      "fecha_emision": "2026-10-16",
-      "fecha_entrega_esperada": null,
-      "total": 30,
       "estado": "pendiente"
     },
     {
