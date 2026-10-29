@@ -1,0 +1,30 @@
+{
+  "id": "Pedido #44702 - 29.10.26",
+  "numero_pedido": "44702",
+  "fecha_emision": "2026-10-29",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Cargo Ripstop (t. 56-60)", "color": "NEGRO", "talle": "56", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop (t. 56-60)", "color": "NEGRO", "talle": "58", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop (t. 56-60)", "color": "NEGRO", "talle": "60", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "38", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "40", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "42", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "46", "cantidad_solicitada": 15 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "48", "cantidad_solicitada": 15 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "50", "cantidad_solicitada": 15 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "52", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Cargo Ripstop", "color": "NEGRO", "talle": "54", "cantidad_solicitada": 5 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 90
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)",
+  "creado_en": "2026-10-29T00:00:00"
+}
