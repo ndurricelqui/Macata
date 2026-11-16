@@ -1,0 +1,27 @@
+{
+  "id": "Pedido #45240 - 16.11.26",
+  "numero_pedido": "45240",
+  "fecha_emision": "2026-11-16",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "38", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "40", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "42", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "46", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "50", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "52", "cantidad_solicitada": 3 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "NEGRO", "talle": "54", "cantidad_solicitada": 2 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 31
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)",
+  "creado_en": "2026-11-16T00:00:00"
+}

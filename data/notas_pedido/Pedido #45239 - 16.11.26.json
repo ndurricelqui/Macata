@@ -1,0 +1,29 @@
+{
+  "id": "Pedido #45239 - 16.11.26",
+  "numero_pedido": "45239",
+  "fecha_emision": "2026-11-16",
+  "proveedor": {
+    "nombre": null,
+    "cuit": null
+  },
+  "estado": "pendiente",
+  "items": [
+    { "codigo": null, "descripcion": "Bombacha lisa PAMPERO (t. 56-60)", "color": "BEIGE", "talle": "56", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha lisa PAMPERO (t. 56-60)", "color": "BEIGE", "talle": "60", "cantidad_solicitada": 2 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "40", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "42", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "44", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "46", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "48", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "50", "cantidad_solicitada": 10 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "52", "cantidad_solicitada": 5 },
+    { "codigo": null, "descripcion": "Bombacha Lisa", "color": "BEIGE", "talle": "54", "cantidad_solicitada": 5 }
+  ],
+  "totales": {
+    "subtotal": 0,
+    "iva": 0,
+    "total": 52
+  },
+  "observaciones": "SUCURSAL CORDOBA - Avenida Rafael Nuñez 4535 CP:5009 (CORDOBA)",
+  "creado_en": "2026-11-16T00:00:00"
+}
